@@ -1,73 +1,94 @@
-# React + TypeScript + Vite
+# Routify
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+No-code backend builder - создавай REST API визуально без написания кода.
 
-Currently, two official plugins are available:
+![React](https://img.shields.io/badge/React-18-blue)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)
+![Express](https://img.shields.io/badge/Express-4-green)
+![MongoDB](https://img.shields.io/badge/MongoDB-Mongoose-green)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Что это?
 
-## React Compiler
+Routify - визуальный конструктор бэкенда. Перетаскиваешь ноды, соединяешь их, нажимаешь Generate - получаешь готовый Express + MongoDB проект.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Возможности
 
-## Expanding the ESLint configuration
+- Drag & drop canvas для построения API
+- Ноды: Endpoint, Database, Auth, Response  
+- Генерация Express.js сервера
+- Генерация Mongoose моделей
+- Swagger/OpenAPI документация
+- Role-based access control (JWT)
+- Экспорт в ZIP архив
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Быстрый старт
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+```bash
+# Клонируй репозиторий
+git clone https://github.com/mortira919/routify.git
+cd routify
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+# Установи зависимости
+npm install
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+# Запусти dev сервер
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Открой http://localhost:5173
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Как пользоваться
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+1. **Load Demo** - загрузи E-Commerce демо проект
+2. **Models** - создай свои модели данных (User, Product, Order...)
+3. **Перетащи ноды** - Endpoint для роутов, Database для CRUD операций
+4. **Соедини ноды** - связи показывают flow данных
+5. **Settings** - настрой БД, порт, CORS
+6. **Generate Code** - скачай готовый бэкенд
+
+## Структура проекта
+
 ```
+src/
+  components/      # React компоненты
+    Canvas/        # Рабочая область с нодами
+    Sidebar/       # Панель с доступными нодами
+    PropertyPanel/ # Редактор свойств выбранной ноды
+    SchemaBuilder/ # Редактор моделей данных
+  generators/      # Генераторы кода
+    express/       # Express.js генератор
+    swagger/       # OpenAPI генератор
+  nodes/           # Визуальные ноды (Endpoint, Database...)
+  store/           # Zustand state management
+  types/           # TypeScript типы
+  utils/           # Утилиты и экспортер
+```
+
+## Генерируемый бэкенд
+
+После нажатия Generate Code скачивается ZIP с:
+
+- `src/index.js` - Express сервер
+- `src/routes/*.js` - API роуты
+- `src/models/*.js` - Mongoose модели
+- `src/swagger.js` - OpenAPI спецификация
+- `package.json` - зависимости
+- `README.md` - документация
+
+## Технологии
+
+**Frontend:**
+- React 18 + TypeScript
+- React Flow (canvas)
+- Zustand (state)
+- Vite (build)
+
+**Генерируемый Backend:**
+- Express.js
+- MongoDB + Mongoose
+- Swagger UI
+- JWT Auth
+
+## Лицензия
+
+MIT
