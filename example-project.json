@@ -1,0 +1,212 @@
+{
+    "id": "example-project-123",
+    "name": "User API",
+    "description": "Example REST API for user management",
+    "createdAt": "2026-01-30T12:00:00.000Z",
+    "updatedAt": "2026-01-30T12:00:00.000Z",
+    "nodes": [
+        {
+            "id": "endpoint-users-list",
+            "type": "endpoint",
+            "position": {
+                "x": 100,
+                "y": 50
+            },
+            "data": {
+                "type": "endpoint",
+                "config": {
+                    "method": "GET",
+                    "path": "/api/users",
+                    "summary": "Get all users",
+                    "description": "Returns a paginated list of users",
+                    "tags": [
+                        "Users"
+                    ],
+                    "deprecated": false,
+                    "auth": {
+                        "required": true,
+                        "type": "jwt",
+                        "roles": [
+                            "admin"
+                        ]
+                    },
+                    "pathParams": [],
+                    "queryParams": [
+                        {
+                            "name": "page",
+                            "type": "number",
+                            "required": false,
+                            "description": "Page number"
+                        },
+                        {
+                            "name": "limit",
+                            "type": "number",
+                            "required": false,
+                            "description": "Items per page"
+                        }
+                    ],
+                    "bodySchema": [],
+                    "responses": [
+                        {
+                            "statusCode": 200,
+                            "description": "List of users",
+                            "schema": []
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "id": "db-users-list",
+            "type": "database",
+            "position": {
+                "x": 450,
+                "y": 50
+            },
+            "data": {
+                "type": "database",
+                "config": {
+                    "operation": "list",
+                    "model": "User",
+                    "filters": [],
+                    "select": []
+                }
+            }
+        },
+        {
+            "id": "endpoint-users-create",
+            "type": "endpoint",
+            "position": {
+                "x": 100,
+                "y": 200
+            },
+            "data": {
+                "type": "endpoint",
+                "config": {
+                    "method": "POST",
+                    "path": "/api/users",
+                    "summary": "Create user",
+                    "description": "Register a new user",
+                    "tags": [
+                        "Users",
+                        "Auth"
+                    ],
+                    "deprecated": false,
+                    "auth": {
+                        "required": false,
+                        "type": "none",
+                        "roles": []
+                    },
+                    "pathParams": [],
+                    "queryParams": [],
+                    "bodySchema": [
+                        {
+                            "name": "name",
+                            "type": "string",
+                            "required": true,
+                            "description": "User name"
+                        },
+                        {
+                            "name": "email",
+                            "type": "string",
+                            "required": true,
+                            "description": "User email"
+                        },
+                        {
+                            "name": "password",
+                            "type": "string",
+                            "required": true,
+                            "description": "Password"
+                        }
+                    ],
+                    "responses": [
+                        {
+                            "statusCode": 201,
+                            "description": "User created",
+                            "schema": []
+                        },
+                        {
+                            "statusCode": 400,
+                            "description": "Validation error",
+                            "schema": []
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "id": "db-users-create",
+            "type": "database",
+            "position": {
+                "x": 450,
+                "y": 200
+            },
+            "data": {
+                "type": "database",
+                "config": {
+                    "operation": "create",
+                    "model": "User",
+                    "filters": [],
+                    "select": []
+                }
+            }
+        }
+    ],
+    "edges": [
+        {
+            "id": "e1",
+            "source": "endpoint-users-list",
+            "target": "db-users-list"
+        },
+        {
+            "id": "e2",
+            "source": "endpoint-users-create",
+            "target": "db-users-create"
+        }
+    ],
+    "models": [
+        {
+            "name": "User",
+            "fields": [
+                {
+                    "name": "name",
+                    "type": "String",
+                    "isRequired": true,
+                    "isUnique": false,
+                    "isId": false
+                },
+                {
+                    "name": "email",
+                    "type": "String",
+                    "isRequired": true,
+                    "isUnique": true,
+                    "isId": false
+                },
+                {
+                    "name": "password",
+                    "type": "String",
+                    "isRequired": true,
+                    "isUnique": false,
+                    "isId": false
+                },
+                {
+                    "name": "role",
+                    "type": "String",
+                    "isRequired": false,
+                    "isUnique": false,
+                    "isId": false
+                }
+            ]
+        }
+    ],
+    "settings": {
+        "database": "mongodb",
+        "port": 3000,
+        "basePath": "/api",
+        "enableSwagger": true,
+        "enableCors": true,
+        "corsOrigins": [
+            "*"
+        ]
+    }
+}
