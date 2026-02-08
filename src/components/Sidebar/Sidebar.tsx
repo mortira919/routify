@@ -79,9 +79,14 @@ export const Sidebar: React.FC<SidebarProps> = ({ onOpenSchema }) => {
         URL.revokeObjectURL(url);
     };
 
-    const getHintForNode = (nameKey: string) => {
-        const hints = t.hints as Record<string, { title: string; what: string; why: string; how: string }>;
-        return hints[nameKey];
+    const getHintForNode = (nameKey: 'endpoint' | 'database' | 'response' | 'auth') => {
+        const nodeHints = {
+            endpoint: t.hints.endpoint,
+            database: t.hints.database,
+            response: t.hints.response,
+            auth: t.hints.auth,
+        };
+        return nodeHints[nameKey];
     };
 
     const filteredCategories = Object.entries(nodeTypes).reduce((acc, [category, nodes]) => {
