@@ -1,0 +1,151 @@
+.backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    z-index: 1000;
+    display: flex;
+    justify-content: flex-end;
+    animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.panel {
+    width: 380px;
+    height: 100%;
+    background: var(--surface-card, #1e1e2e);
+    border-left: 1px solid var(--border, #313244);
+    overflow-y: auto;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+    }
+
+    to {
+        transform: translateX(0);
+    }
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    border-bottom: 1px solid var(--border, #313244);
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, transparent 100%);
+}
+
+.title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-primary, #cdd6f4);
+}
+
+.titleIcon {
+    color: var(--accent-primary, #6366f1);
+}
+
+.closeBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-radius: 8px;
+    color: var(--text-secondary, #a6adc8);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.closeBtn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-primary, #cdd6f4);
+}
+
+.content {
+    padding: 20px;
+}
+
+.step {
+    position: relative;
+    padding-left: 32px;
+    margin-bottom: 24px;
+}
+
+.step:last-child {
+    margin-bottom: 0;
+}
+
+.step::before {
+    content: '';
+    position: absolute;
+    left: 10px;
+    top: 24px;
+    bottom: -24px;
+    width: 2px;
+    background: var(--border, #313244);
+}
+
+.step:last-child::before {
+    display: none;
+}
+
+.stepNumber {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--accent-primary, #6366f1);
+    border-radius: 50%;
+    font-size: 12px;
+    font-weight: 600;
+    color: white;
+}
+
+.stepTitle {
+    margin: 0 0 6px 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary, #cdd6f4);
+}
+
+.stepText {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--text-secondary, #a6adc8);
+}
+
+.tip {
+    margin-top: 24px;
+    padding: 14px;
+    background: rgba(99, 102, 241, 0.1);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    border-radius: 10px;
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--text-secondary, #a6adc8);
+}

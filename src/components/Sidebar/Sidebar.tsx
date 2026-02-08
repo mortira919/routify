@@ -10,12 +10,13 @@ import {
     Layers
 } from 'lucide-react';
 import { useProjectStore } from '../../store/projectStore';
+import { useTranslation } from '../../i18n';
+import { HintTooltip } from '../ui';
 import styles from './Sidebar.module.css';
 
 interface NodeType {
     type: string;
-    name: string;
-    description: string;
+    nameKey: 'endpoint' | 'database' | 'response' | 'auth';
     icon: React.ReactNode;
     iconClass: string;
 }
@@ -24,46 +25,43 @@ interface SidebarProps {
     onOpenSchema?: () => void;
 }
 
-const nodeTypes: Record<string, NodeType[]> = {
-    'Endpoints': [
-        {
-            type: 'endpoint',
-            name: 'API Endpoint',
-            description: 'HTTP request handler',
-            icon: <Globe size={16} color="white" />,
-            iconClass: styles['nodeIcon--endpoint'],
-        },
-    ],
-    'Data': [
-        {
-            type: 'database',
-            name: 'Database',
-            description: 'CRUD operations',
-            icon: <Database size={16} color="white" />,
-            iconClass: styles['nodeIcon--database'],
-        },
-        {
-            type: 'response',
-            name: 'Response',
-            description: 'Send response',
-            icon: <Send size={16} color="white" />,
-            iconClass: styles['nodeIcon--response'],
-        },
-    ],
-    'Security': [
-        {
-            type: 'auth',
-            name: 'Authentication',
-            description: 'JWT, API Key, etc.',
-            icon: <Shield size={16} color="white" />,
-            iconClass: styles['nodeIcon--auth'],
-        },
-    ],
-};
-
 export const Sidebar: React.FC<SidebarProps> = ({ onOpenSchema }) => {
     const [search, setSearch] = useState('');
     const { exportProject, project } = useProjectStore();
+    const t = useTranslation();
+
+    const nodeTypes: Record<string, NodeType[]> = {
+        [t.sidebar.categories.endpoints]: [
+            {
+                type: 'endpoint',
+                nameKey: 'endpoint',
+                icon: <Globe size={16} color="white" />,
+                iconClass: styles['nodeIcon--endpoint'],
+            },
+        ],
+        [t.sidebar.categories.data]: [
+            {
+                type: 'database',
+                nameKey: 'database',
+                icon: <Database size={16} color="white" />,
+                iconClass: styles['nodeIcon--database'],
+            },
+            {
+                type: 'response',
+                nameKey: 'response',
+                icon: <Send size={16} color="white" />,
+                iconClass: styles['nodeIcon--response'],
+            },
+        ],
+        [t.sidebar.categories.security]: [
+            {
+                type: 'auth',
+                nameKey: 'auth',
+                icon: <Shield size={16} color="white" />,
+                iconClass: styles['nodeIcon--auth'],
+            },
+        ],
+    };
 
     const handleDragStart = (event: React.DragEvent, nodeType: string) => {
         event.dataTransfer.setData('application/routify-node', nodeType);
@@ -81,11 +79,18 @@ export const Sidebar: React.FC<SidebarProps> = ({ onOpenSchema }) => {
         URL.revokeObjectURL(url);
     };
 
+    const getHintForNode = (nameKey: string) => {
+        const hints = t.hints as Record<string, { title: string; what: string; why: string; how: string }>;
+        return hints[nameKey];
+    };
+
     const filteredCategories = Object.entries(nodeTypes).reduce((acc, [category, nodes]) => {
         const filtered = nodes.filter(
-            node =>
-                node.name.toLowerCase().includes(search.toLowerCase()) ||
-                node.description.toLowerCase().includes(search.toLowerCase())
+            node => {
+                const nodeInfo = t.sidebar.nodes[node.nameKey];
+                return nodeInfo.name.toLowerCase().includes(search.toLowerCase()) ||
+                    nodeInfo.description.toLowerCase().includes(search.toLowerCase());
+            }
         );
         if (filtered.length > 0) {
             acc[category] = filtered;
@@ -109,7 +114,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ onOpenSchema }) => {
                     <Search size={16} className={styles.searchIcon} />
                     <input
                         type="text"
-                        placeholder="Search nodes..."
+                        placeholder={t.sidebar.searchPlaceholder}
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                         className={styles.searchInput}
@@ -122,22 +127,40 @@ export const Sidebar: React.FC<SidebarProps> = ({ onOpenSchema }) => {
                 {Object.entries(filteredCategories).map(([category, nodes]) => (
                     <div key={category} className={styles.category}>
                         <h3 className={styles.categoryTitle}>{category}</h3>
-                        {nodes.map((node) => (
-                            <div
-                                key={node.type}
-                                className={styles.nodeItem}
-                                draggable
-                                onDragStart={(e) => handleDragStart(e, node.type)}
-                            >
-                                <div className={`${styles.nodeIcon} ${node.iconClass}`}>
-                                    {node.icon}
+                        {nodes.map((node) => {
+                            const nodeInfo = t.sidebar.nodes[node.nameKey];
+                            const hint = getHintForNode(node.nameKey);
+
+                            return (
+                                <div
+                                    key={node.type}
+                                    className={styles.nodeItem}
+                                    draggable
+                                    onDragStart={(e) => handleDragStart(e, node.type)}
+                                >
+                                    <div className={`${styles.nodeIcon} ${node.iconClass}`}>
+                                        {node.icon}
+                                    </div>
+                                    <div className={styles.nodeInfo}>
+                                        <div className={styles.nodeName}>
+                                            {hint ? (
+                                                <HintTooltip
+                                                    title={hint.title}
+                                                    what={hint.what}
+                                                    why={hint.why}
+                                                    how={hint.how}
+                                                >
+                                                    {nodeInfo.name}
+                                                </HintTooltip>
+                                            ) : (
+                                                nodeInfo.name
+                                            )}
+                                        </div>
+                                        <div className={styles.nodeDesc}>{nodeInfo.description}</div>
+                                    </div>
                                 </div>
-                                <div className={styles.nodeInfo}>
-                                    <div className={styles.nodeName}>{node.name}</div>
-                                    <div className={styles.nodeDesc}>{node.description}</div>
-                                </div>
-                            </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 ))}
             </div>
@@ -146,12 +169,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ onOpenSchema }) => {
             <div className={styles.footer}>
                 <button className={styles.schemaBtn} onClick={onOpenSchema}>
                     <Layers size={18} />
-                    Models
+                    {t.sidebar.models}
                     <span className={styles.modelBadge}>{project.models.length}</span>
                 </button>
                 <button className={styles.exportBtn} onClick={handleExport}>
                     <Download size={18} />
-                    Export JSON
+                    {t.sidebar.exportJson}
                 </button>
             </div>
         </aside>

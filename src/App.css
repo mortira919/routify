@@ -112,6 +112,18 @@
   box-shadow: 0 0 20px rgb(245 158 11 / 0.4);
 }
 
+.headerBtn--tutorial {
+  background: linear-gradient(135deg, #8b5cf6, #a78bfa);
+  border-color: #8b5cf6;
+  color: #fff;
+  font-weight: 600;
+}
+
+.headerBtn--tutorial:hover {
+  background: linear-gradient(135deg, #a78bfa, #c4b5fd);
+  box-shadow: 0 0 20px rgb(139 92 246 / 0.4);
+}
+
 .canvasWrapper {
   flex: 1;
   position: relative;

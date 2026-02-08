@@ -11,11 +11,11 @@ interface DatabaseNodeData {
 }
 
 const operationLabels: Record<string, string> = {
-    create: 'Create Record',
-    read: 'Find One',
-    update: 'Update Record',
-    delete: 'Delete Record',
-    list: 'Find Many',
+    create: 'Создать запись',
+    read: 'Найти одну',
+    update: 'Обновить запись',
+    delete: 'Удалить запись',
+    list: 'Найти много',
 };
 
 export const DatabaseNode: React.FC<NodeProps> = memo(({ data, selected }) => {
@@ -35,8 +35,8 @@ export const DatabaseNode: React.FC<NodeProps> = memo(({ data, selected }) => {
                     <Database size={18} color="white" />
                 </div>
                 <div className={styles.headerContent}>
-                    <div className={styles.title}>Database</div>
-                    <div className={styles.subtitle}>{config.model || 'No model selected'}</div>
+                    <div className={styles.title}>База данных</div>
+                    <div className={styles.subtitle}>{config.model || 'Модель не выбрана'}</div>
                 </div>
             </div>
 
@@ -48,7 +48,7 @@ export const DatabaseNode: React.FC<NodeProps> = memo(({ data, selected }) => {
 
                 {config.filters.length > 0 && (
                     <div className={styles.infoRow}>
-                        <span className={styles.infoLabel}>Filters</span>
+                        <span className={styles.infoLabel}>Фильтров</span>
                         <span className={styles.infoValue}>{config.filters.length}</span>
                     </div>
                 )}

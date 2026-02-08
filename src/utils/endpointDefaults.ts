@@ -5,7 +5,7 @@ export const createDefaultEndpointConfig = (): EndpointConfig => ({
     path: '/api/resource',
 
     // Swagger
-    summary: 'Get resource',
+    summary: 'Получить ресурс',
     description: '',
     tags: [],
     deprecated: false,
@@ -35,31 +35,31 @@ export const createDefaultAuth = (): EndpointAuth => ({
 
 export const createDefaultResponse = (statusCode: number = 200): ResponseDefinition => ({
     statusCode,
-    description: statusCode === 200 ? 'Successful response' : 'Error response',
+    description: statusCode === 200 ? 'Успешный ответ' : 'Ответ с ошибкой',
     schema: [],
     example: '',
 });
 
 export const HTTP_STATUS_CODES = [
     { code: 200, label: '200 OK' },
-    { code: 201, label: '201 Created' },
-    { code: 204, label: '204 No Content' },
-    { code: 400, label: '400 Bad Request' },
-    { code: 401, label: '401 Unauthorized' },
-    { code: 403, label: '403 Forbidden' },
-    { code: 404, label: '404 Not Found' },
-    { code: 409, label: '409 Conflict' },
-    { code: 422, label: '422 Unprocessable' },
-    { code: 500, label: '500 Server Error' },
+    { code: 201, label: '201 Создано' },
+    { code: 204, label: '204 Нет содержимого' },
+    { code: 400, label: '400 Неверный запрос' },
+    { code: 401, label: '401 Не авторизован' },
+    { code: 403, label: '403 Запрещено' },
+    { code: 404, label: '404 Не найдено' },
+    { code: 409, label: '409 Конфликт' },
+    { code: 422, label: '422 Необрабатываемый' },
+    { code: 500, label: '500 Ошибка сервера' },
 ];
 
 export const AUTH_TYPES = [
-    { value: 'none', label: 'No Auth' },
-    { value: 'jwt', label: 'JWT Token' },
-    { value: 'apiKey', label: 'API Key' },
-    { value: 'basic', label: 'Basic Auth' },
+    { value: 'none', label: 'Без авторизации' },
+    { value: 'jwt', label: 'JWT токен' },
+    { value: 'apiKey', label: 'API ключ' },
+    { value: 'basic', label: 'Basic авторизация' },
 ] as const;
 
-export const DEFAULT_ROLES = ['admin', 'user', 'guest', 'moderator'];
+export const DEFAULT_ROLES = ['админ', 'пользователь', 'гость', 'модератор'];
 
-export const COMMON_TAGS = ['Users', 'Auth', 'Products', 'Orders', 'Settings', 'Public'];
+export const COMMON_TAGS = ['Пользователи', 'Авторизация', 'Товары', 'Заказы', 'Настройки', 'Публичное'];

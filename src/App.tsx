@@ -1,11 +1,13 @@
 import { useState } from 'react';
-import { Play, FileJson, Settings, Check, Loader2, Sparkles } from 'lucide-react';
+import { Play, FileJson, Settings, Check, Loader2, Sparkles, GraduationCap } from 'lucide-react';
 import { Sidebar } from './components/Sidebar/Sidebar';
 import { Canvas } from './components/Canvas/Canvas';
 import { PropertyPanel } from './components/PropertyPanel/PropertyPanel';
 import { SettingsModal } from './components/SettingsModal/SettingsModal';
 import { SchemaPanel } from './components/SchemaPanel/SchemaPanel';
+import { TutorialPanel } from './components/TutorialPanel';
 import { useProjectStore } from './store/projectStore';
+import { useTranslation } from './i18n';
 import { ProjectExporter } from './utils/ProjectExporter';
 import './App.css';
 
@@ -22,20 +24,20 @@ const createDemoProject = () => ({
         config: {
           method: 'GET' as const,
           path: '/api/products',
-          summary: 'List all products',
-          description: 'Get paginated list of products with optional filters',
-          tags: ['Products', 'Public'],
+          summary: 'Список товаров',
+          description: 'Получить постраничный список товаров с фильтрами',
+          tags: ['Товары', 'Публичное'],
           deprecated: false,
           auth: { required: false, type: 'none' as const, roles: [] },
           pathParams: [],
           queryParams: [
-            { name: 'category', type: 'string' as const, required: false, description: 'Filter by category' },
-            { name: 'minPrice', type: 'number' as const, required: false, description: 'Minimum price' },
-            { name: 'maxPrice', type: 'number' as const, required: false, description: 'Maximum price' },
-            { name: 'limit', type: 'number' as const, required: false, description: 'Items per page' },
+            { name: 'category', type: 'string' as const, required: false, description: 'Фильтр по категории' },
+            { name: 'minPrice', type: 'number' as const, required: false, description: 'Минимальная цена' },
+            { name: 'maxPrice', type: 'number' as const, required: false, description: 'Максимальная цена' },
+            { name: 'limit', type: 'number' as const, required: false, description: 'Товаров на странице' },
           ],
           bodySchema: [],
-          responses: [{ statusCode: 200, description: 'List of products', schema: [] }],
+          responses: [{ statusCode: 200, description: 'Список товаров', schema: [] }],
         }
       }
     },
@@ -54,23 +56,23 @@ const createDemoProject = () => ({
         config: {
           method: 'POST' as const,
           path: '/api/products',
-          summary: 'Create product',
-          description: 'Add new product to catalog (Admin/Manager only)',
-          tags: ['Products', 'Admin'],
+          summary: 'Создать товар',
+          description: 'Добавить новый товар в каталог (только Админ/Менеджер)',
+          tags: ['Товары', 'Админ'],
           deprecated: false,
-          auth: { required: true, type: 'jwt' as const, roles: ['admin', 'manager'] },
+          auth: { required: true, type: 'jwt' as const, roles: ['админ', 'менеджер'] },
           pathParams: [],
           queryParams: [],
           bodySchema: [
-            { name: 'name', type: 'string' as const, required: true, description: 'Product name' },
-            { name: 'description', type: 'string' as const, required: false, description: 'Product description' },
-            { name: 'price', type: 'number' as const, required: true, description: 'Price in cents' },
-            { name: 'stock', type: 'number' as const, required: true, description: 'Available stock' },
-            { name: 'category', type: 'string' as const, required: true, description: 'Category ID' },
+            { name: 'name', type: 'string' as const, required: true, description: 'Название товара' },
+            { name: 'description', type: 'string' as const, required: false, description: 'Описание товара' },
+            { name: 'price', type: 'number' as const, required: true, description: 'Цена в копейках' },
+            { name: 'stock', type: 'number' as const, required: true, description: 'Количество на складе' },
+            { name: 'category', type: 'string' as const, required: true, description: 'ID категории' },
           ],
           responses: [
-            { statusCode: 201, description: 'Product created', schema: [] },
-            { statusCode: 403, description: 'Forbidden - Admin only', schema: [] },
+            { statusCode: 201, description: 'Товар создан', schema: [] },
+            { statusCode: 403, description: 'Доступ запрещён', schema: [] },
           ],
         }
       }
@@ -90,19 +92,19 @@ const createDemoProject = () => ({
         config: {
           method: 'PUT' as const,
           path: '/api/products/:id',
-          summary: 'Update product',
-          description: 'Update product details (Admin/Manager only)',
-          tags: ['Products', 'Admin'],
+          summary: 'Обновить товар',
+          description: 'Обновить данные товара (только Админ/Менеджер)',
+          tags: ['Товары', 'Админ'],
           deprecated: false,
-          auth: { required: true, type: 'jwt' as const, roles: ['admin', 'manager'] },
-          pathParams: [{ name: 'id', type: 'string' as const, required: true, description: 'Product ID' }],
+          auth: { required: true, type: 'jwt' as const, roles: ['админ', 'менеджер'] },
+          pathParams: [{ name: 'id', type: 'string' as const, required: true, description: 'ID товара' }],
           queryParams: [],
           bodySchema: [
-            { name: 'name', type: 'string' as const, required: false, description: 'Product name' },
-            { name: 'price', type: 'number' as const, required: false, description: 'Price' },
-            { name: 'stock', type: 'number' as const, required: false, description: 'Stock' },
+            { name: 'name', type: 'string' as const, required: false, description: 'Название товара' },
+            { name: 'price', type: 'number' as const, required: false, description: 'Цена' },
+            { name: 'stock', type: 'number' as const, required: false, description: 'Количество' },
           ],
-          responses: [{ statusCode: 200, description: 'Product updated', schema: [] }],
+          responses: [{ statusCode: 200, description: 'Товар обновлён', schema: [] }],
         }
       }
     },
@@ -122,17 +124,17 @@ const createDemoProject = () => ({
         config: {
           method: 'GET' as const,
           path: '/api/orders',
-          summary: 'Get my orders',
-          description: 'Get orders for current user (or all for admin)',
-          tags: ['Orders'],
+          summary: 'Мои заказы',
+          description: 'Получить заказы текущего пользователя (или все для админа)',
+          tags: ['Заказы'],
           deprecated: false,
-          auth: { required: true, type: 'jwt' as const, roles: ['customer', 'admin', 'manager'] },
+          auth: { required: true, type: 'jwt' as const, roles: ['покупатель', 'админ', 'менеджер'] },
           pathParams: [],
           queryParams: [
-            { name: 'status', type: 'string' as const, required: false, description: 'Filter: pending, paid, shipped, delivered' },
+            { name: 'status', type: 'string' as const, required: false, description: 'Фильтр: pending, paid, shipped, delivered' },
           ],
           bodySchema: [],
-          responses: [{ statusCode: 200, description: 'List of orders', schema: [] }],
+          responses: [{ statusCode: 200, description: 'Список заказов', schema: [] }],
         }
       }
     },
@@ -151,20 +153,20 @@ const createDemoProject = () => ({
         config: {
           method: 'POST' as const,
           path: '/api/orders',
-          summary: 'Create order',
-          description: 'Place a new order (Customer)',
-          tags: ['Orders'],
+          summary: 'Создать заказ',
+          description: 'Оформить новый заказ (Покупатель)',
+          tags: ['Заказы'],
           deprecated: false,
-          auth: { required: true, type: 'jwt' as const, roles: ['customer', 'admin'] },
+          auth: { required: true, type: 'jwt' as const, roles: ['покупатель', 'админ'] },
           pathParams: [],
           queryParams: [],
           bodySchema: [
-            { name: 'items', type: 'array' as const, required: true, description: 'Array of {productId, quantity}' },
-            { name: 'shippingAddress', type: 'string' as const, required: true, description: 'Shipping address' },
+            { name: 'items', type: 'array' as const, required: true, description: 'Массив {productId, quantity}' },
+            { name: 'shippingAddress', type: 'string' as const, required: true, description: 'Адрес доставки' },
           ],
           responses: [
-            { statusCode: 201, description: 'Order created', schema: [] },
-            { statusCode: 400, description: 'Invalid items', schema: [] },
+            { statusCode: 201, description: 'Заказ создан', schema: [] },
+            { statusCode: 400, description: 'Неверные товары', schema: [] },
           ],
         }
       }
@@ -184,17 +186,17 @@ const createDemoProject = () => ({
         config: {
           method: 'PATCH' as const,
           path: '/api/orders/:id/status',
-          summary: 'Update order status',
-          description: 'Change order status (Admin/Manager only)',
-          tags: ['Orders', 'Admin'],
+          summary: 'Обновить статус заказа',
+          description: 'Изменить статус заказа (только Админ/Менеджер)',
+          tags: ['Заказы', 'Админ'],
           deprecated: false,
-          auth: { required: true, type: 'jwt' as const, roles: ['admin', 'manager'] },
-          pathParams: [{ name: 'id', type: 'string' as const, required: true, description: 'Order ID' }],
+          auth: { required: true, type: 'jwt' as const, roles: ['админ', 'менеджер'] },
+          pathParams: [{ name: 'id', type: 'string' as const, required: true, description: 'ID заказа' }],
           queryParams: [],
           bodySchema: [
-            { name: 'status', type: 'string' as const, required: true, description: 'New status: paid, shipped, delivered' },
+            { name: 'status', type: 'string' as const, required: true, description: 'Новый статус: paid, shipped, delivered' },
           ],
-          responses: [{ statusCode: 200, description: 'Status updated', schema: [] }],
+          responses: [{ statusCode: 200, description: 'Статус обновлён', schema: [] }],
         }
       }
     },
@@ -214,17 +216,17 @@ const createDemoProject = () => ({
         config: {
           method: 'GET' as const,
           path: '/api/users',
-          summary: 'List all users',
-          description: 'Get all registered users (Admin only)',
-          tags: ['Users', 'Admin'],
+          summary: 'Список пользователей',
+          description: 'Получить всех зарегистрированных пользователей (только Админ)',
+          tags: ['Пользователи', 'Админ'],
           deprecated: false,
-          auth: { required: true, type: 'jwt' as const, roles: ['admin'] },
+          auth: { required: true, type: 'jwt' as const, roles: ['админ'] },
           pathParams: [],
           queryParams: [
-            { name: 'role', type: 'string' as const, required: false, description: 'Filter by role' },
+            { name: 'role', type: 'string' as const, required: false, description: 'Фильтр по роли' },
           ],
           bodySchema: [],
-          responses: [{ statusCode: 200, description: 'List of users', schema: [] }],
+          responses: [{ statusCode: 200, description: 'Список пользователей', schema: [] }],
         }
       }
     },
@@ -243,21 +245,21 @@ const createDemoProject = () => ({
         config: {
           method: 'POST' as const,
           path: '/api/auth/register',
-          summary: 'Register user',
-          description: 'Create new customer account',
-          tags: ['Auth', 'Public'],
+          summary: 'Регистрация',
+          description: 'Создать новый аккаунт покупателя',
+          tags: ['Авторизация', 'Публичное'],
           deprecated: false,
           auth: { required: false, type: 'none' as const, roles: [] },
           pathParams: [],
           queryParams: [],
           bodySchema: [
-            { name: 'email', type: 'string' as const, required: true, description: 'Email address' },
-            { name: 'password', type: 'string' as const, required: true, description: 'Password' },
-            { name: 'name', type: 'string' as const, required: true, description: 'Full name' },
+            { name: 'email', type: 'string' as const, required: true, description: 'Email адрес' },
+            { name: 'password', type: 'string' as const, required: true, description: 'Пароль' },
+            { name: 'name', type: 'string' as const, required: true, description: 'Полное имя' },
           ],
           responses: [
-            { statusCode: 201, description: 'User registered', schema: [] },
-            { statusCode: 409, description: 'Email already exists', schema: [] },
+            { statusCode: 201, description: 'Пользователь зарегистрирован', schema: [] },
+            { statusCode: 409, description: 'Email уже занят', schema: [] },
           ],
         }
       }
@@ -278,15 +280,15 @@ const createDemoProject = () => ({
         config: {
           method: 'GET' as const,
           path: '/api/categories',
-          summary: 'List categories',
-          description: 'Get all product categories',
-          tags: ['Categories', 'Public'],
+          summary: 'Список категорий',
+          description: 'Получить все категории товаров',
+          tags: ['Категории', 'Публичное'],
           deprecated: false,
           auth: { required: false, type: 'none' as const, roles: [] },
           pathParams: [],
           queryParams: [],
           bodySchema: [],
-          responses: [{ statusCode: 200, description: 'List of categories', schema: [] }],
+          responses: [{ statusCode: 200, description: 'Список категорий', schema: [] }],
         }
       }
     },
@@ -305,18 +307,18 @@ const createDemoProject = () => ({
         config: {
           method: 'POST' as const,
           path: '/api/categories',
-          summary: 'Create category',
-          description: 'Add new product category (Admin only)',
-          tags: ['Categories', 'Admin'],
+          summary: 'Создать категорию',
+          description: 'Добавить новую категорию товаров (только Админ)',
+          tags: ['Категории', 'Админ'],
           deprecated: false,
-          auth: { required: true, type: 'jwt' as const, roles: ['admin'] },
+          auth: { required: true, type: 'jwt' as const, roles: ['админ'] },
           pathParams: [],
           queryParams: [],
           bodySchema: [
-            { name: 'name', type: 'string' as const, required: true, description: 'Category name' },
+            { name: 'name', type: 'string' as const, required: true, description: 'Название категории' },
             { name: 'slug', type: 'string' as const, required: true, description: 'URL slug' },
           ],
-          responses: [{ statusCode: 201, description: 'Category created', schema: [] }],
+          responses: [{ statusCode: 201, description: 'Категория создана', schema: [] }],
         }
       }
     },
@@ -394,10 +396,12 @@ const createDemoProject = () => ({
 
 function App() {
   const { project, setProjectName, setProject, importProject } = useProjectStore();
+  const t = useTranslation();
   const [isGenerating, setIsGenerating] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [showSchema, setShowSchema] = useState(false);
+  const [showTutorial, setShowTutorial] = useState(false);
 
   const handleGenerateCode = async () => {
     setIsGenerating(true);
@@ -408,7 +412,7 @@ function App() {
       setTimeout(() => setShowSuccess(false), 3000);
     } catch (error) {
       console.error('Failed to generate code:', error);
-      alert('Failed to generate code. Please try again.');
+      alert(t.toasts.generateError);
     } finally {
       setIsGenerating(false);
     }
@@ -426,10 +430,10 @@ function App() {
           const json = event.target?.result as string;
           try {
             importProject(json);
-            alert('Project imported successfully!');
+            alert(t.toasts.importSuccess);
           } catch (error) {
             console.error('Failed to import:', error);
-            alert('Failed to import project. Make sure it\'s a valid Routify project file.');
+            alert(t.toasts.importError);
           }
         };
         reader.readAsText(file);
@@ -442,8 +446,8 @@ function App() {
     const demo = createDemoProject();
     setProject({
       ...project,
-      name: 'E-Commerce Shop API',
-      description: 'Full-featured shop backend with Products, Orders, Users, and Categories. Role-based access: admin, manager, customer.',
+      name: 'Магазин API',
+      description: 'Полнофункциональный бэкенд магазина: Товары, Заказы, Пользователи, Категории. Ролевой доступ: админ, менеджер, покупатель.',
       nodes: demo.nodes as typeof project.nodes,
       edges: demo.edges,
       models: demo.models as typeof project.models,
@@ -465,22 +469,26 @@ function App() {
             />
             <div className="status">
               <span className="statusDot" />
-              Saved
+              {t.header.saved}
             </div>
           </div>
 
           <div className="headerActions">
+            <button className="headerBtn headerBtn--tutorial" onClick={() => setShowTutorial(true)}>
+              <GraduationCap size={16} />
+              {t.header.tutorial}
+            </button>
             <button className="headerBtn headerBtn--demo" onClick={handleLoadDemo}>
               <Sparkles size={16} />
-              Load Demo
+              {t.header.loadDemo}
             </button>
             <button className="headerBtn" onClick={handleImport}>
               <FileJson size={16} />
-              Import
+              {t.header.import}
             </button>
             <button className="headerBtn" onClick={() => setShowSettings(true)}>
               <Settings size={16} />
-              Settings
+              {t.header.settings}
             </button>
             <button
               className="headerBtn headerBtn--primary"
@@ -490,17 +498,17 @@ function App() {
               {isGenerating ? (
                 <>
                   <Loader2 size={16} className="spinning" />
-                  Generating...
+                  {t.header.generating}
                 </>
               ) : showSuccess ? (
                 <>
                   <Check size={16} />
-                  Downloaded!
+                  {t.header.downloaded}
                 </>
               ) : (
                 <>
                   <Play size={16} />
-                  Generate Code
+                  {t.header.generateCode}
                 </>
               )}
             </button>
@@ -516,10 +524,11 @@ function App() {
 
       <SettingsModal isOpen={showSettings} onClose={() => setShowSettings(false)} />
       <SchemaPanel isOpen={showSchema} onClose={() => setShowSchema(false)} />
+      <TutorialPanel isOpen={showTutorial} onClose={() => setShowTutorial(false)} />
 
       {showSuccess && (
         <div className="toast">
-          ✅ Backend generated successfully! Check your downloads folder.
+          {t.toasts.backendGenerated}
         </div>
       )}
     </div>

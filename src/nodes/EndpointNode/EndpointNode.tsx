@@ -27,8 +27,8 @@ export const EndpointNode: React.FC<NodeProps> = memo(({ data, selected }) => {
                     <Globe size={18} color="white" />
                 </div>
                 <div className={styles.headerContent}>
-                    <div className={styles.title}>API Endpoint</div>
-                    <div className={styles.subtitle}>HTTP Request Handler</div>
+                    <div className={styles.title}>API Эндпоинт</div>
+                    <div className={styles.subtitle}>HTTP обработчик</div>
                 </div>
             </div>
 

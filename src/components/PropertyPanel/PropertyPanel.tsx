@@ -4,9 +4,10 @@ import {
     Shield, FileText, Settings, Database, Zap, Tag
 } from 'lucide-react';
 import { useProjectStore } from '../../store/projectStore';
+import { useTranslation } from '../../i18n';
 import type { EndpointConfig, DatabaseConfig } from '../../types';
 import { SchemaEditor } from '../SchemaEditor/SchemaEditor';
-import { TagInput, RoleSelector } from '../ui';
+import { TagInput, RoleSelector, HintTooltip } from '../ui';
 import {
     AUTH_TYPES,
     HTTP_STATUS_CODES,
@@ -24,6 +25,7 @@ type SectionName = 'basic' | 'swagger' | 'auth' | 'params' | 'body' | 'response'
 
 export const PropertyPanel: React.FC = () => {
     const { project, selectedNodeId, setSelectedNode, updateNode, removeNode } = useProjectStore();
+    const t = useTranslation();
     const [expandedSections, setExpandedSections] = useState<Set<SectionName>>(
         new Set(['basic', 'swagger'])
     );
@@ -45,9 +47,9 @@ export const PropertyPanel: React.FC = () => {
             <aside className={styles.panel}>
                 <div className={styles.empty}>
                     <MousePointer2 size={48} className={styles.emptyIcon} />
-                    <h3 className={styles.emptyTitle}>No node selected</h3>
+                    <h3 className={styles.emptyTitle}>{t.propertyPanel.noNodeSelected}</h3>
                     <p className={styles.emptyText}>
-                        Click on a node to view and edit its properties
+                        {t.propertyPanel.noNodeSelectedHint}
                     </p>
                 </div>
             </aside>
@@ -70,7 +72,8 @@ export const PropertyPanel: React.FC = () => {
         name: SectionName,
         icon: React.ReactNode,
         title: string,
-        content: React.ReactNode
+        content: React.ReactNode,
+        hintText?: string
     ) => {
         const isExpanded = expandedSections.has(name);
         return (
@@ -80,7 +83,15 @@ export const PropertyPanel: React.FC = () => {
                     onClick={() => toggleSection(name)}
                 >
                     <div className={styles.sectionIcon}>{icon}</div>
-                    <span className={styles.sectionTitle}>{title}</span>
+                    <span className={styles.sectionTitle}>
+                        {hintText ? (
+                            <HintTooltip title={title} text={hintText}>
+                                {title}
+                            </HintTooltip>
+                        ) : (
+                            title
+                        )}
+                    </span>
                     {isExpanded ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
                 </button>
                 {isExpanded && (
@@ -95,7 +106,7 @@ export const PropertyPanel: React.FC = () => {
     const renderEndpointForm = (config: EndpointConfig) => (
         <>
             {/* Basic Settings */}
-            {renderSection('basic', <Settings size={16} />, 'Basic Settings', (
+            {renderSection('basic', <Settings size={16} />, t.propertyPanel.sections.basic, (
                 <>
                     <div className={styles.methodGrid}>
                         {HTTP_METHODS.map((method) => (
@@ -109,47 +120,47 @@ export const PropertyPanel: React.FC = () => {
                         ))}
                     </div>
                     <div className={styles.field}>
-                        <label className={styles.fieldLabel}>Path</label>
+                        <label className={styles.fieldLabel}>{t.propertyPanel.fields.path}</label>
                         <input
                             type="text"
                             className={styles.fieldInput}
                             value={config.path}
                             onChange={(e) => updateConfig({ path: e.target.value })}
-                            placeholder="/api/users/:id"
+                            placeholder={t.propertyPanel.fields.pathPlaceholder}
                         />
                     </div>
                 </>
-            ))}
+            ), t.hints.sections.basic)}
 
             {/* Swagger Documentation */}
-            {renderSection('swagger', <FileText size={16} />, 'Documentation', (
+            {renderSection('swagger', <FileText size={16} />, t.propertyPanel.sections.documentation, (
                 <>
                     <div className={styles.field}>
-                        <label className={styles.fieldLabel}>Summary</label>
+                        <label className={styles.fieldLabel}>{t.propertyPanel.fields.summary}</label>
                         <input
                             type="text"
                             className={styles.fieldInput}
                             value={config.summary}
                             onChange={(e) => updateConfig({ summary: e.target.value })}
-                            placeholder="Brief description"
+                            placeholder={t.propertyPanel.fields.summaryPlaceholder}
                         />
                     </div>
                     <div className={styles.field}>
-                        <label className={styles.fieldLabel}>Description</label>
+                        <label className={styles.fieldLabel}>{t.propertyPanel.fields.description}</label>
                         <textarea
                             className={styles.fieldTextarea}
                             value={config.description}
                             onChange={(e) => updateConfig({ description: e.target.value })}
-                            placeholder="Detailed description for Swagger docs..."
+                            placeholder={t.propertyPanel.fields.descriptionPlaceholder}
                             rows={3}
                         />
                     </div>
                     <div className={styles.field}>
-                        <label className={styles.fieldLabel}>Tags</label>
+                        <label className={styles.fieldLabel}>{t.propertyPanel.fields.tags}</label>
                         <TagInput
                             tags={config.tags}
                             onChange={(tags) => updateConfig({ tags })}
-                            placeholder="Add tags..."
+                            placeholder={t.propertyPanel.fields.tagsPlaceholder}
                             suggestions={COMMON_TAGS}
                         />
                     </div>
@@ -159,13 +170,13 @@ export const PropertyPanel: React.FC = () => {
                             checked={config.deprecated}
                             onChange={(e) => updateConfig({ deprecated: e.target.checked })}
                         />
-                        <span>Mark as deprecated</span>
+                        <span>{t.propertyPanel.fields.markAsDeprecated}</span>
                     </label>
                 </>
-            ))}
+            ), t.hints.sections.documentation)}
 
             {/* Authentication */}
-            {renderSection('auth', <Shield size={16} />, 'Authentication', (
+            {renderSection('auth', <Shield size={16} />, t.propertyPanel.sections.authentication, (
                 <>
                     <label className={styles.checkboxLabel}>
                         <input
@@ -175,13 +186,13 @@ export const PropertyPanel: React.FC = () => {
                                 auth: { ...config.auth, required: e.target.checked }
                             })}
                         />
-                        <span>Require authentication</span>
+                        <span>{t.propertyPanel.fields.requireAuth}</span>
                     </label>
 
                     {config.auth.required && (
                         <>
                             <div className={styles.field}>
-                                <label className={styles.fieldLabel}>Auth Type</label>
+                                <label className={styles.fieldLabel}>{t.propertyPanel.fields.authType}</label>
                                 <select
                                     className={styles.fieldSelect}
                                     value={config.auth.type}
@@ -196,7 +207,7 @@ export const PropertyPanel: React.FC = () => {
                             </div>
 
                             <div className={styles.field}>
-                                <label className={styles.fieldLabel}>Required Roles</label>
+                                <label className={styles.fieldLabel}>{t.propertyPanel.fields.requiredRoles}</label>
                                 <RoleSelector
                                     selectedRoles={config.auth.roles}
                                     onChange={(roles) => updateConfig({
@@ -208,13 +219,13 @@ export const PropertyPanel: React.FC = () => {
                         </>
                     )}
                 </>
-            ))}
+            ), t.hints.sections.authentication)}
 
             {/* Request Parameters */}
-            {renderSection('params', <Database size={16} />, 'Parameters', (
+            {renderSection('params', <Database size={16} />, t.propertyPanel.sections.parameters, (
                 <>
                     <div className={styles.subSection}>
-                        <h5 className={styles.subTitle}>Query Parameters</h5>
+                        <h5 className={styles.subTitle}>{t.propertyPanel.fields.queryParams}</h5>
                         <SchemaEditor
                             schema={config.queryParams.map(p => ({
                                 name: p.name,
@@ -233,7 +244,7 @@ export const PropertyPanel: React.FC = () => {
                         />
                     </div>
                     <div className={styles.subSection}>
-                        <h5 className={styles.subTitle}>Path Parameters</h5>
+                        <h5 className={styles.subTitle}>{t.propertyPanel.fields.pathParams}</h5>
                         <SchemaEditor
                             schema={config.pathParams.map(p => ({
                                 name: p.name,
@@ -252,21 +263,21 @@ export const PropertyPanel: React.FC = () => {
                         />
                     </div>
                 </>
-            ))}
+            ), t.hints.sections.parameters)}
 
             {/* Request Body */}
             {(config.method === 'POST' || config.method === 'PUT' || config.method === 'PATCH') &&
-                renderSection('body', <Zap size={16} />, 'Request Body', (
+                renderSection('body', <Zap size={16} />, t.propertyPanel.sections.requestBody, (
                     <SchemaEditor
                         schema={config.bodySchema}
                         onChange={(bodySchema) => updateConfig({ bodySchema })}
-                        title="Body Schema"
+                        title={t.propertyPanel.fields.bodySchema}
                     />
-                ))
+                ), t.hints.sections.requestBody)
             }
 
             {/* Response */}
-            {renderSection('response', <Tag size={16} />, 'Response', (
+            {renderSection('response', <Tag size={16} />, t.propertyPanel.sections.response, (
                 <>
                     {config.responses.map((resp, index) => (
                         <div key={index} className={styles.responseBlock}>
@@ -308,7 +319,7 @@ export const PropertyPanel: React.FC = () => {
                                     newResponses[index] = { ...resp, description: e.target.value };
                                     updateConfig({ responses: newResponses });
                                 }}
-                                placeholder="Response description"
+                                placeholder={t.propertyPanel.fields.responseDescription}
                             />
                             <SchemaEditor
                                 schema={resp.schema}
@@ -328,17 +339,17 @@ export const PropertyPanel: React.FC = () => {
                             });
                         }}
                     >
-                        + Add Response
+                        {t.propertyPanel.buttons.addResponse}
                     </button>
                 </>
-            ))}
+            ), t.hints.sections.response)}
         </>
     );
 
     const renderDatabaseForm = (config: DatabaseConfig) => (
         <>
             <div className={styles.section}>
-                <h4 className={styles.sectionTitle}>Operation</h4>
+                <h4 className={styles.sectionTitle}>{t.propertyPanel.sections.operation}</h4>
                 <div className={styles.methodGrid}>
                     {DB_OPERATIONS.map((op) => (
                         <button
@@ -354,15 +365,15 @@ export const PropertyPanel: React.FC = () => {
             </div>
 
             <div className={styles.section}>
-                <h4 className={styles.sectionTitle}>Model</h4>
+                <h4 className={styles.sectionTitle}>{t.propertyPanel.sections.model}</h4>
                 <div className={styles.field}>
-                    <label className={styles.fieldLabel}>Model Name</label>
+                    <label className={styles.fieldLabel}>{t.propertyPanel.fields.modelName}</label>
                     <input
                         type="text"
                         className={styles.fieldInput}
                         value={config.model}
                         onChange={(e) => updateConfig({ model: e.target.value })}
-                        placeholder="User"
+                        placeholder={t.propertyPanel.fields.modelPlaceholder}
                     />
                 </div>
             </div>
@@ -370,12 +381,13 @@ export const PropertyPanel: React.FC = () => {
     );
 
     const getNodeTitle = () => {
+        const nodeTypes = t.propertyPanel.nodeTypes;
         switch (selectedNode.data.type) {
-            case 'endpoint': return 'API Endpoint';
-            case 'database': return 'Database';
-            case 'response': return 'Response';
-            case 'auth': return 'Authentication';
-            default: return 'Node';
+            case 'endpoint': return nodeTypes.endpoint;
+            case 'database': return nodeTypes.database;
+            case 'response': return nodeTypes.response;
+            case 'auth': return nodeTypes.auth;
+            default: return nodeTypes.node;
         }
     };
 
@@ -396,7 +408,7 @@ export const PropertyPanel: React.FC = () => {
             <div className={styles.actions}>
                 <button className={styles.deleteBtn} onClick={handleDelete}>
                     <Trash2 size={16} style={{ marginRight: '8px' }} />
-                    Delete Node
+                    {t.propertyPanel.deleteNode}
                 </button>
             </div>
         </aside>

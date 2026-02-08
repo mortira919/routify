@@ -5,16 +5,17 @@ import {
     Link2, ChevronDown, ChevronRight, Asterisk
 } from 'lucide-react';
 import { useProjectStore } from '../../store/projectStore';
+import { useTranslation } from '../../i18n';
 import type { DataModel, ModelField } from '../../types';
 import styles from './SchemaBuilder.module.css';
 
 const FIELD_TYPES = [
-    { value: 'String', label: 'String', icon: Type },
-    { value: 'Int', label: 'Integer', icon: Hash },
-    { value: 'Float', label: 'Float', icon: Hash },
-    { value: 'Boolean', label: 'Boolean', icon: ToggleLeft },
-    { value: 'DateTime', label: 'DateTime', icon: Calendar },
-    { value: 'Json', label: 'JSON', icon: FileJson },
+    { value: 'String', labelKey: 'string', icon: Type },
+    { value: 'Int', labelKey: 'integer', icon: Hash },
+    { value: 'Float', labelKey: 'float', icon: Hash },
+    { value: 'Boolean', labelKey: 'boolean', icon: ToggleLeft },
+    { value: 'DateTime', labelKey: 'dateTime', icon: Calendar },
+    { value: 'Json', labelKey: 'json', icon: FileJson },
 ] as const;
 
 const createDefaultField = (): ModelField => ({
@@ -27,6 +28,7 @@ const createDefaultField = (): ModelField => ({
 
 export const SchemaBuilder: React.FC = () => {
     const { project, addModel, updateModel, removeModel } = useProjectStore();
+    const t = useTranslation();
     const [expandedModels, setExpandedModels] = useState<Set<string>>(new Set());
     const [newModelName, setNewModelName] = useState('');
     const [editingField, setEditingField] = useState<{ model: string; index: number } | null>(null);
@@ -48,7 +50,7 @@ export const SchemaBuilder: React.FC = () => {
 
         // Check for duplicates
         if (project.models.some(m => m.name.toLowerCase() === newModelName.toLowerCase())) {
-            alert('Model with this name already exists!');
+            alert(t.schemaBuilder.errors.duplicateModel);
             return;
         }
 
@@ -95,7 +97,7 @@ export const SchemaBuilder: React.FC = () => {
 
         const field = model.fields[fieldIndex];
         if (field.isId) {
-            alert('Cannot remove ID field!');
+            alert(t.schemaBuilder.errors.cannotRemoveId);
             return;
         }
 
@@ -106,7 +108,7 @@ export const SchemaBuilder: React.FC = () => {
     };
 
     const handleRemoveModel = (modelName: string) => {
-        if (!confirm(`Delete model "${modelName}"? This cannot be undone.`)) return;
+        if (!confirm(t.schemaBuilder.errors.confirmDelete.replace('{name}', modelName))) return;
         removeModel(modelName);
     };
 
@@ -115,11 +117,16 @@ export const SchemaBuilder: React.FC = () => {
         return fieldType?.icon || Type;
     };
 
+    const getFieldTypeLabel = (labelKey: string) => {
+        const labels = t.schemaBuilder.fieldTypes as Record<string, string>;
+        return labels[labelKey] || labelKey;
+    };
+
     return (
         <div className={styles.container}>
             <div className={styles.header}>
                 <Database size={20} className={styles.headerIcon} />
-                <h2>Data Models</h2>
+                <h2>{t.schemaBuilder.title}</h2>
                 <span className={styles.badge}>{project.models.length}</span>
             </div>
 
@@ -127,7 +134,7 @@ export const SchemaBuilder: React.FC = () => {
             <div className={styles.addModel}>
                 <input
                     type="text"
-                    placeholder="New model name..."
+                    placeholder={t.schemaBuilder.newModelPlaceholder}
                     value={newModelName}
                     onChange={(e) => setNewModelName(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && handleAddModel()}
@@ -147,8 +154,8 @@ export const SchemaBuilder: React.FC = () => {
                 {project.models.length === 0 && (
                     <div className={styles.empty}>
                         <Database size={32} />
-                        <p>No models yet</p>
-                        <span>Create your first data model above</span>
+                        <p>{t.schemaBuilder.noModels}</p>
+                        <span>{t.schemaBuilder.noModelsHint}</span>
                     </div>
                 )}
 
@@ -166,7 +173,7 @@ export const SchemaBuilder: React.FC = () => {
                                 </span>
                                 <Database size={16} className={styles.modelIcon} />
                                 <span className={styles.modelName}>{model.name}</span>
-                                <span className={styles.fieldCount}>{model.fields.length} fields</span>
+                                <span className={styles.fieldCount}>{model.fields.length} {t.schemaBuilder.fields}</span>
                                 <button
                                     className={styles.deleteModelBtn}
                                     onClick={(e) => {
@@ -216,21 +223,23 @@ export const SchemaBuilder: React.FC = () => {
                                                         className={styles.typeSelect}
                                                         disabled={field.isId}
                                                     >
-                                                        {FIELD_TYPES.map(t => (
-                                                            <option key={t.value} value={t.value}>{t.label}</option>
+                                                        {FIELD_TYPES.map(ft => (
+                                                            <option key={ft.value} value={ft.value}>
+                                                                {getFieldTypeLabel(ft.labelKey)}
+                                                            </option>
                                                         ))}
                                                     </select>
 
                                                     <div className={styles.fieldFlags}>
                                                         {field.isId && (
-                                                            <span className={styles.flagId} title="Primary Key">
+                                                            <span className={styles.flagId} title={t.schemaBuilder.flags.primaryKey}>
                                                                 <Key size={12} />
                                                             </span>
                                                         )}
                                                         <button
                                                             className={`${styles.flagBtn} ${field.isRequired ? styles.active : ''}`}
                                                             onClick={() => handleUpdateField(model.name, index, { isRequired: !field.isRequired })}
-                                                            title="Required"
+                                                            title={t.schemaBuilder.flags.required}
                                                             disabled={field.isId}
                                                         >
                                                             <Asterisk size={12} />
@@ -238,7 +247,7 @@ export const SchemaBuilder: React.FC = () => {
                                                         <button
                                                             className={`${styles.flagBtn} ${field.isUnique ? styles.active : ''}`}
                                                             onClick={() => handleUpdateField(model.name, index, { isUnique: !field.isUnique })}
-                                                            title="Unique"
+                                                            title={t.schemaBuilder.flags.unique}
                                                             disabled={field.isId}
                                                         >
                                                             <Link2 size={12} />
@@ -263,7 +272,7 @@ export const SchemaBuilder: React.FC = () => {
                                         onClick={() => handleAddField(model.name)}
                                     >
                                         <Plus size={14} />
-                                        Add Field
+                                        {t.schemaBuilder.addField}
                                     </button>
                                 </div>
                             )}
