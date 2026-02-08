@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Play, FileJson, Settings, Check, Loader2, Sparkles, GraduationCap } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Play, FileJson, Settings, Check, Loader2, Sparkles, GraduationCap, Menu, X } from 'lucide-react';
 import { Sidebar } from './components/Sidebar/Sidebar';
 import { Canvas } from './components/Canvas/Canvas';
 import { PropertyPanel } from './components/PropertyPanel/PropertyPanel';
@@ -402,6 +402,18 @@ function App() {
   const [showSettings, setShowSettings] = useState(false);
   const [showSchema, setShowSchema] = useState(false);
   const [showTutorial, setShowTutorial] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Close mobile menu on resize to desktop
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 1024) {
+        setMobileMenuOpen(false);
+      }
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const handleGenerateCode = async () => {
     setIsGenerating(true);
@@ -456,10 +468,31 @@ function App() {
 
   return (
     <div className="app">
-      <Sidebar onOpenSchema={() => setShowSchema(true)} />
+      {/* Mobile overlay */}
+      {mobileMenuOpen && (
+        <div
+          className="mobileOverlay mobileOverlay--visible"
+          onClick={() => setMobileMenuOpen(false)}
+        />
+      )}
+
+      <Sidebar
+        onOpenSchema={() => setShowSchema(true)}
+        isOpen={mobileMenuOpen}
+        onClose={() => setMobileMenuOpen(false)}
+      />
 
       <main className="main">
         <header className="header">
+          {/* Mobile burger button */}
+          <button
+            className="mobileMenuBtn"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label="Toggle menu"
+          >
+            {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
+
           <div className="projectName">
             <input
               type="text"

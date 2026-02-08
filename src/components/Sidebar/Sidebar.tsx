@@ -7,7 +7,8 @@ import {
     Search,
     Download,
     Zap,
-    Layers
+    Layers,
+    X
 } from 'lucide-react';
 import { useProjectStore } from '../../store/projectStore';
 import { useTranslation } from '../../i18n';
@@ -23,9 +24,11 @@ interface NodeType {
 
 interface SidebarProps {
     onOpenSchema?: () => void;
+    isOpen?: boolean;
+    onClose?: () => void;
 }
 
-export const Sidebar: React.FC<SidebarProps> = ({ onOpenSchema }) => {
+export const Sidebar: React.FC<SidebarProps> = ({ onOpenSchema, isOpen, onClose }) => {
     const [search, setSearch] = useState('');
     const { exportProject, project } = useProjectStore();
     const t = useTranslation();
@@ -104,13 +107,22 @@ export const Sidebar: React.FC<SidebarProps> = ({ onOpenSchema }) => {
     }, {} as Record<string, NodeType[]>);
 
     return (
-        <aside className={styles.sidebar}>
+        <aside className={`${styles.sidebar} ${isOpen ? styles['sidebar--open'] : ''}`}>
             {/* Logo */}
             <div className={styles.logo}>
                 <div className={styles.logoIcon}>
                     <Zap size={20} color="white" />
                 </div>
                 <span className={styles.logoText}>Routify</span>
+                {onClose && (
+                    <button
+                        className={styles.closeBtn}
+                        onClick={onClose}
+                        aria-label="Close menu"
+                    >
+                        <X size={20} />
+                    </button>
+                )}
             </div>
 
             {/* Search */}
