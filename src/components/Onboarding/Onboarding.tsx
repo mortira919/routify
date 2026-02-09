@@ -97,33 +97,7 @@ export const Onboarding: React.FC = () => {
                 </div>
             </section>
 
-            {/* How it Works - Visual Timeline */}
-            <section className={styles.timelineSection}>
-                <Title level={2} className={styles.sectionTitle}>
-                    <span className={styles.italicAccent}>Как это</span> работает
-                </Title>
 
-                <div className={styles.timelineTrack}>
-                    <div className={styles.timelineLine} />
-
-                    {t.landing.howItWorks.steps.map((step, index) => (
-                        <div key={index} className={`${styles.timelineStep} ${index % 2 === 0 ? styles.timelineLeft : styles.timelineRight}`}>
-                            <div className={styles.timelineNode}>
-                                <span>{index + 1}</span>
-                            </div>
-                            <div className={styles.timelineCard}>
-                                <Text strong className={styles.timelineTitle}>{step.title}</Text>
-                                <Text className={styles.timelineDesc}>{step.desc}</Text>
-                                <div className={styles.timelineVisual}>
-                                    <div className={styles.timelinePlaceholder}>
-                                        <span>step{index + 1}.png</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </section>
 
             {/* Tech Stack Section */}
             <section className={styles.sectionContainer}>
