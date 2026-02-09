@@ -1,3 +1,6 @@
+/* Import beautiful italic font */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&display=swap');
+
 .container {
     width: 100%;
     min-height: 100vh;
@@ -7,6 +10,13 @@
     position: relative;
     overflow-x: hidden;
     scroll-behavior: smooth;
+}
+
+/* Accent italic font for headings */
+.italicAccent {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-style: italic;
+    font-weight: 400;
 }
 
 .background {
@@ -91,15 +101,18 @@
 .title {
     font-size: clamp(48px, 8vw, 84px) !important;
     font-weight: 900 !important;
-    line-height: 1 !important;
+    line-height: 1.1 !important;
     margin-bottom: 24px !important;
     color: #ffffff !important;
-    text-transform: uppercase;
+    text-transform: none;
+    font-family: 'Playfair Display', Georgia, serif;
 }
 
 .titleAccent {
     color: #76B900;
     display: block;
+    font-style: italic;
+    font-weight: 400;
 }
 
 .subtitle {
@@ -346,5 +359,237 @@
     to {
         opacity: 1;
         transform: translateY(0);
+    }
+}
+
+/* ========================================
+   EXTENDED SECTIONS
+   ======================================== */
+
+/* Use Cases Section */
+.useCasesSection {
+    padding: 100px 5%;
+    background: linear-gradient(180deg, #000 0%, #050505 50%, #000 100%);
+}
+
+.useCasesGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 40px;
+    margin-top: 60px;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.useCaseCard {
+    background: rgba(118, 185, 0, 0.03);
+    border: 1px solid rgba(118, 185, 0, 0.1);
+    border-radius: 20px;
+    padding: 50px 40px;
+    text-align: center;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.useCaseCard:hover {
+    transform: translateY(-10px);
+    background: rgba(118, 185, 0, 0.08);
+    border-color: rgba(118, 185, 0, 0.3);
+    box-shadow: 0 20px 60px rgba(118, 185, 0, 0.15);
+}
+
+.useCaseEmoji {
+    font-size: 64px;
+    margin-bottom: 24px;
+    display: block;
+}
+
+.useCaseTitle {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 28px !important;
+    font-style: italic;
+    color: #ffffff !important;
+    margin-bottom: 16px !important;
+    display: block;
+}
+
+.useCaseDesc {
+    font-size: 16px !important;
+    color: rgba(255, 255, 255, 0.6) !important;
+    line-height: 1.7 !important;
+}
+
+/* Screenshots Showcase */
+.showcaseSection {
+    padding: 120px 5%;
+    position: relative;
+    overflow: hidden;
+}
+
+.showcaseSection::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 1px;
+    height: 100%;
+    background: linear-gradient(180deg, transparent, rgba(118, 185, 0, 0.3), transparent);
+}
+
+.showcaseTitle {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 48px !important;
+    font-style: italic;
+    text-align: center;
+    margin-bottom: 80px !important;
+    color: #ffffff !important;
+}
+
+.showcaseItem {
+    display: flex;
+    align-items: center;
+    gap: 80px;
+    max-width: 1200px;
+    margin: 0 auto 100px;
+    padding: 0 5%;
+}
+
+.showcaseItem:nth-child(even) {
+    flex-direction: row-reverse;
+}
+
+.showcaseContent {
+    flex: 1;
+}
+
+.showcaseLabel {
+    font-size: 14px;
+    letter-spacing: 3px;
+    color: #76B900;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    display: block;
+}
+
+.showcaseHeading {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 36px !important;
+    font-weight: 700;
+    color: #ffffff !important;
+    margin-bottom: 20px !important;
+}
+
+.showcaseText {
+    font-size: 18px !important;
+    color: rgba(255, 255, 255, 0.6) !important;
+    line-height: 1.8 !important;
+}
+
+.showcaseImage {
+    flex: 1;
+    aspect-ratio: 16 / 10;
+    background: rgba(118, 185, 0, 0.05);
+    border: 1px solid rgba(118, 185, 0, 0.2);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 80px;
+    overflow: hidden;
+}
+
+.showcaseImage img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 16px;
+}
+
+/* Quote Section */
+.quoteSection {
+    padding: 120px 5%;
+    text-align: center;
+    background: #050505;
+}
+
+.quoteText {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(24px, 4vw, 42px) !important;
+    font-style: italic;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.9) !important;
+    max-width: 900px;
+    margin: 0 auto 40px !important;
+    line-height: 1.5 !important;
+}
+
+.quoteAuthor {
+    font-size: 16px;
+    color: #76B900;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+/* Stats Section */
+.statsSection {
+    padding: 80px 5%;
+    background: rgba(118, 185, 0, 0.03);
+    border-top: 1px solid rgba(118, 185, 0, 0.1);
+    border-bottom: 1px solid rgba(118, 185, 0, 0.1);
+}
+
+.statsGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 40px;
+    max-width: 1000px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.statItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.statNumber {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 56px;
+    font-weight: 700;
+    color: #76B900;
+    line-height: 1;
+    margin-bottom: 8px;
+}
+
+.statLabel {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .useCasesGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .showcaseItem {
+        flex-direction: column !important;
+        gap: 40px;
+    }
+
+    .statsGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .showcaseTitle {
+        font-size: 32px !important;
+    }
+
+    .quoteText {
+        font-size: 24px !important;
     }
 }

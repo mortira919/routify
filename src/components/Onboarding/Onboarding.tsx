@@ -110,6 +110,117 @@ export const Onboarding: React.FC = () => {
                 </div>
             </section>
 
+            {/* Use Cases Section */}
+            <section className={styles.useCasesSection}>
+                <div className={styles.sectionContainer}>
+                    <Title level={2} className={styles.sectionTitle}>
+                        Для кого это?
+                    </Title>
+                    <div className={styles.useCasesGrid}>
+                        <div className={styles.useCaseCard}>
+                            <span className={styles.useCaseEmoji}>🚀</span>
+                            <Text className={styles.useCaseTitle}>Стартапы</Text>
+                            <Text className={styles.useCaseDesc}>
+                                Быстро прототипируйте MVP и получите работающий бэкенд за часы, а не недели.
+                            </Text>
+                        </div>
+                        <div className={styles.useCaseCard}>
+                            <span className={styles.useCaseEmoji}>👨‍💻</span>
+                            <Text className={styles.useCaseTitle}>Разработчики</Text>
+                            <Text className={styles.useCaseDesc}>
+                                Автоматизируйте рутину и сосредоточьтесь на бизнес-логике вместо бойлерплейта.
+                            </Text>
+                        </div>
+                        <div className={styles.useCaseCard}>
+                            <span className={styles.useCaseEmoji}>🎓</span>
+                            <Text className={styles.useCaseTitle}>Студенты</Text>
+                            <Text className={styles.useCaseDesc}>
+                                Изучайте архитектуру API визуально и понимайте связи между компонентами.
+                            </Text>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Stats Section */}
+            <section className={styles.statsSection}>
+                <div className={styles.statsGrid}>
+                    <div className={styles.statItem}>
+                        <span className={styles.statNumber}>10x</span>
+                        <span className={styles.statLabel}>Быстрее разработка</span>
+                    </div>
+                    <div className={styles.statItem}>
+                        <span className={styles.statNumber}>0</span>
+                        <span className={styles.statLabel}>Бойлерплейт код</span>
+                    </div>
+                    <div className={styles.statItem}>
+                        <span className={styles.statNumber}>100%</span>
+                        <span className={styles.statLabel}>TypeScript</span>
+                    </div>
+                    <div className={styles.statItem}>
+                        <span className={styles.statNumber}>∞</span>
+                        <span className={styles.statLabel}>Возможностей</span>
+                    </div>
+                </div>
+            </section>
+
+            {/* Showcase Section */}
+            <section className={styles.showcaseSection}>
+                <Title level={2} className={styles.showcaseTitle}>
+                    Как это выглядит
+                </Title>
+
+                <div className={styles.showcaseItem}>
+                    <div className={styles.showcaseContent}>
+                        <span className={styles.showcaseLabel}>Шаг 1</span>
+                        <Text className={styles.showcaseHeading}>Визуальное проектирование</Text>
+                        <Text className={styles.showcaseText}>
+                            Drag-and-drop интерфейс позволяет создавать сложные API буквально перетаскивая узлы.
+                            Эндпоинты, базы данных, аутентификация — всё на одном холсте.
+                        </Text>
+                    </div>
+                    <div className={styles.showcaseImage}>
+                        🎨
+                    </div>
+                </div>
+
+                <div className={styles.showcaseItem}>
+                    <div className={styles.showcaseContent}>
+                        <span className={styles.showcaseLabel}>Шаг 2</span>
+                        <Text className={styles.showcaseHeading}>Умные модели данных</Text>
+                        <Text className={styles.showcaseText}>
+                            Определяйте схемы с автоматической валидацией типов.
+                            Связи между моделями создаются интуитивно понятным образом.
+                        </Text>
+                    </div>
+                    <div className={styles.showcaseImage}>
+                        📊
+                    </div>
+                </div>
+
+                <div className={styles.showcaseItem}>
+                    <div className={styles.showcaseContent}>
+                        <span className={styles.showcaseLabel}>Шаг 3</span>
+                        <Text className={styles.showcaseHeading}>Генерация кода</Text>
+                        <Text className={styles.showcaseText}>
+                            Один клик — и получаете готовый архив с Express.js сервером,
+                            Prisma схемами, middleware и полной документацией Swagger.
+                        </Text>
+                    </div>
+                    <div className={styles.showcaseImage}>
+                        ⚡
+                    </div>
+                </div>
+            </section>
+
+            {/* Quote Section */}
+            <section className={styles.quoteSection}>
+                <Text className={styles.quoteText}>
+                    "Лучший код — тот, который не нужно писать вручную"
+                </Text>
+                <span className={styles.quoteAuthor}>— Философия Routify</span>
+            </section>
+
             {/* CTA Section */}
             <section className={styles.finalCta}>
                 <Title level={2} className={styles.sectionTitle}>
