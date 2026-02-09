@@ -43,6 +43,7 @@ interface ProjectState {
 
     hasCompletedOnboarding: boolean;
     completeOnboarding: () => void;
+    resetOnboarding: () => void;
 }
 
 const defaultSettings: ProjectSettings = {
@@ -147,6 +148,10 @@ export const useProjectStore = create<ProjectState>()(
 
             completeOnboarding: () => set((state) => {
                 state.hasCompletedOnboarding = true;
+            }),
+
+            resetOnboarding: () => set((state) => {
+                state.hasCompletedOnboarding = false;
             }),
 
             setProject: (project) => set((state) => {

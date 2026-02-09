@@ -10,7 +10,7 @@ import {
 import {
   Play, FileJson, Settings,
   Loader2, Sparkles, GraduationCap,
-  Menu, X
+  Menu, X, Home
 } from 'lucide-react';
 import { Sidebar } from './components/Sidebar/Sidebar';
 import { Canvas } from './components/Canvas/Canvas';
@@ -232,7 +232,7 @@ const createDemoProject = () => ({
 });
 
 function App() {
-  const { project, setProjectName, setProject, importProject, hasCompletedOnboarding } = useProjectStore();
+  const { project, setProjectName, setProject, importProject, hasCompletedOnboarding, resetOnboarding } = useProjectStore();
   const { t } = useTranslation();
   const [isGenerating, setIsGenerating] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
@@ -366,6 +366,15 @@ function App() {
 
       <main className="main">
         <header className="header">
+          <Tooltip title="На главную">
+            <Button
+              className="headerBtn--home"
+              icon={<Home size={18} />}
+              onClick={resetOnboarding}
+              type="text"
+            />
+          </Tooltip>
+
           <Button
             className="mobileMenuBtn"
             icon={mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}

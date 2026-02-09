@@ -134,6 +134,17 @@
   box-shadow: 0 0 15px rgba(118, 185, 0, 0.2);
 }
 
+.headerBtn--home {
+  color: rgba(255, 255, 255, 0.5);
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.headerBtn--home:hover {
+  color: #76B900;
+  background: rgba(118, 185, 0, 0.1);
+}
+
 .canvasWrapper {
   flex: 1;
   position: relative;
