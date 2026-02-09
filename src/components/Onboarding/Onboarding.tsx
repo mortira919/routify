@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Typography, Space } from 'antd';
-import { Layout as LayoutIcon, ChevronRight, Zap, Target, Cpu, Shield } from 'lucide-react';
+import { ChevronRight, Zap, Target, Cpu, Shield } from 'lucide-react';
 import { useProjectStore } from '../../store/projectStore';
 import { useTranslation } from '../../i18n';
 import { LanguageSwitcher } from '../LanguageSwitcher/LanguageSwitcher';
@@ -29,7 +29,7 @@ export const Onboarding: React.FC = () => {
             {/* Sticky Header */}
             <header className={styles.landingHeader}>
                 <div className={styles.headerLogo}>
-                    <LayoutIcon className={styles.headerLogoIcon} size={32} />
+                    <img src="/apiicon.png" alt="Routify" className={styles.headerLogoImg} />
                     <span>ROUTIFY</span>
                 </div>
                 <LanguageSwitcher />
