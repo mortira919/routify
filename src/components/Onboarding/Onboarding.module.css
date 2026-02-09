@@ -4,11 +4,13 @@
 .container {
     width: 100%;
     min-height: 100vh;
+    height: 100vh;
     background: #000000;
     color: #ffffff;
     font-family: var(--font-sans);
     position: relative;
     overflow-x: hidden;
+    overflow-y: auto;
     scroll-behavior: smooth;
 }
 
