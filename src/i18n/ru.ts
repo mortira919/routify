@@ -333,7 +333,7 @@ export const ru = {
       ]
     },
     footer: {
-      status: 'СИСТЕМЫ ОНЛАЙН // ТЕМА NVIDIA АКТИВНА',
+      status: 'ROUTIFY // ВИЗУАЛЬНЫЙ КОНСТРУКТОР API',
     }
   }
 } as const;
