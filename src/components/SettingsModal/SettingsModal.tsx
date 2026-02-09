@@ -5,7 +5,7 @@ import { useProjectStore } from '../../store/projectStore';
 import { useTranslation } from '../../i18n';
 import type { ProjectSettings } from '../../types';
 
-const { Title, Text } = Typography;
+const { Text } = Typography;
 
 interface SettingsModalProps {
     isOpen: boolean;
@@ -46,7 +46,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
             className="nvidia-modal"
         >
             <Form layout="vertical">
-                <Divider orientation="left" style={{ borderColor: 'var(--border-color)' }}>
+                <Divider style={{ borderColor: 'var(--border-color)' }}>
                     <Space><Database size={16} /> <Text strong>{t.settings.database.title}</Text></Space>
                 </Divider>
 
@@ -58,7 +58,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
                     />
                 </Form.Item>
 
-                <Divider orientation="left" style={{ borderColor: 'var(--border-color)' }}>
+                <Divider style={{ borderColor: 'var(--border-color)' }}>
                     <Space><Globe size={16} /> <Text strong>{t.settings.server.title}</Text></Space>
                 </Divider>
 
@@ -78,7 +78,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
                     </Form.Item>
                 </div>
 
-                <Divider orientation="left" style={{ borderColor: 'var(--border-color)' }}>
+                <Divider style={{ borderColor: 'var(--border-color)' }}>
                     <Space><Shield size={16} /> <Text strong>{t.settings.features.title}</Text></Space>
                 </Divider>
                 <Space direction="vertical" style={{ width: '100%' }}>
@@ -108,7 +108,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
                     )}
                 </Space>
 
-                <Divider orientation="left" style={{ borderColor: 'var(--border-color)' }}>
+                <Divider style={{ borderColor: 'var(--border-color)' }}>
                     <Space><FileCode size={16} /> <Text strong>{t.settings.generatedCode.title}</Text></Space>
                 </Divider>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
