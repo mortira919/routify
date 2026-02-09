@@ -110,39 +110,43 @@ export const Onboarding: React.FC = () => {
                 </div>
             </section>
 
-            {/* Use Cases Section */}
+            {/* Use Cases - Floating Cards Design */}
             <section className={styles.useCasesSection}>
-                <div className={styles.sectionContainer}>
-                    <Title level={2} className={styles.sectionTitle}>
-                        Для кого это?
-                    </Title>
-                    <div className={styles.useCasesGrid}>
-                        <div className={styles.useCaseCard}>
-                            <span className={styles.useCaseEmoji}>🚀</span>
-                            <Text className={styles.useCaseTitle}>Стартапы</Text>
-                            <Text className={styles.useCaseDesc}>
-                                Быстро прототипируйте MVP и получите работающий бэкенд за часы, а не недели.
-                            </Text>
-                        </div>
-                        <div className={styles.useCaseCard}>
-                            <span className={styles.useCaseEmoji}>👨‍💻</span>
-                            <Text className={styles.useCaseTitle}>Разработчики</Text>
-                            <Text className={styles.useCaseDesc}>
-                                Автоматизируйте рутину и сосредоточьтесь на бизнес-логике вместо бойлерплейта.
-                            </Text>
-                        </div>
-                        <div className={styles.useCaseCard}>
-                            <span className={styles.useCaseEmoji}>🎓</span>
-                            <Text className={styles.useCaseTitle}>Студенты</Text>
-                            <Text className={styles.useCaseDesc}>
-                                Изучайте архитектуру API визуально и понимайте связи между компонентами.
-                            </Text>
-                        </div>
+                <Title level={2} className={styles.sectionTitle}>
+                    <span className={styles.italicAccent}>Для кого</span> это создано?
+                </Title>
+
+                <div className={styles.floatingCards}>
+                    <div className={`${styles.floatingCard} ${styles.floatingCard1}`}>
+                        <div className={styles.floatingCardGlow} />
+                        <img src="/startup.png" alt="Startup" className={styles.floatingIcon} />
+                        <Text className={styles.floatingTitle}>Стартапы</Text>
+                        <Text className={styles.floatingDesc}>
+                            От идеи до MVP за считанные часы. Прототипируйте быстрее конкурентов.
+                        </Text>
+                    </div>
+
+                    <div className={`${styles.floatingCard} ${styles.floatingCard2}`}>
+                        <div className={styles.floatingCardGlow} />
+                        <img src="/developer.png" alt="Developer" className={styles.floatingIcon} />
+                        <Text className={styles.floatingTitle}>Разработчики</Text>
+                        <Text className={styles.floatingDesc}>
+                            Забудьте про бойлерплейт. Фокус на логике, не на рутине.
+                        </Text>
+                    </div>
+
+                    <div className={`${styles.floatingCard} ${styles.floatingCard3}`}>
+                        <div className={styles.floatingCardGlow} />
+                        <img src="/student.png" alt="Student" className={styles.floatingIcon} />
+                        <Text className={styles.floatingTitle}>Студенты</Text>
+                        <Text className={styles.floatingDesc}>
+                            Визуальное понимание архитектуры. Учитесь на практике.
+                        </Text>
                     </div>
                 </div>
             </section>
 
-            {/* Stats Section */}
+            {/* Stats Section - Animated counters */}
             <section className={styles.statsSection}>
                 <div className={styles.statsGrid}>
                     <div className={styles.statItem}>
@@ -164,51 +168,57 @@ export const Onboarding: React.FC = () => {
                 </div>
             </section>
 
-            {/* Showcase Section */}
+            {/* Showcase - Bento Grid Design */}
             <section className={styles.showcaseSection}>
                 <Title level={2} className={styles.showcaseTitle}>
-                    Как это выглядит
+                    <span className={styles.italicAccent}>Как это</span> работает
                 </Title>
 
-                <div className={styles.showcaseItem}>
-                    <div className={styles.showcaseContent}>
-                        <span className={styles.showcaseLabel}>Шаг 1</span>
-                        <Text className={styles.showcaseHeading}>Визуальное проектирование</Text>
-                        <Text className={styles.showcaseText}>
-                            Drag-and-drop интерфейс позволяет создавать сложные API буквально перетаскивая узлы.
-                            Эндпоинты, базы данных, аутентификация — всё на одном холсте.
-                        </Text>
+                <div className={styles.bentoGrid}>
+                    <div className={`${styles.bentoCard} ${styles.bentoLarge}`}>
+                        <span className={styles.bentoNumber}>01</span>
+                        <div className={styles.bentoContent}>
+                            <Text className={styles.bentoHeading}>Визуальное проектирование</Text>
+                            <Text className={styles.bentoText}>
+                                Drag-and-drop интерфейс. Эндпоинты, базы данных, аутентификация —
+                                всё на одном холсте.
+                            </Text>
+                        </div>
+                        <div className={styles.bentoVisual}>
+                            <div className={styles.bentoPlaceholder}>
+                                <span>canvas.png</span>
+                            </div>
+                        </div>
                     </div>
-                    <div className={styles.showcaseImage}>
-                        🎨
-                    </div>
-                </div>
 
-                <div className={styles.showcaseItem}>
-                    <div className={styles.showcaseContent}>
-                        <span className={styles.showcaseLabel}>Шаг 2</span>
-                        <Text className={styles.showcaseHeading}>Умные модели данных</Text>
-                        <Text className={styles.showcaseText}>
-                            Определяйте схемы с автоматической валидацией типов.
-                            Связи между моделями создаются интуитивно понятным образом.
-                        </Text>
+                    <div className={`${styles.bentoCard} ${styles.bentoSmall}`}>
+                        <span className={styles.bentoNumber}>02</span>
+                        <div className={styles.bentoContent}>
+                            <Text className={styles.bentoHeading}>Умные схемы</Text>
+                            <Text className={styles.bentoText}>
+                                Автоматическая валидация типов и связей между моделями.
+                            </Text>
+                        </div>
+                        <div className={styles.bentoVisual}>
+                            <div className={styles.bentoPlaceholder}>
+                                <span>schema.png</span>
+                            </div>
+                        </div>
                     </div>
-                    <div className={styles.showcaseImage}>
-                        📊
-                    </div>
-                </div>
 
-                <div className={styles.showcaseItem}>
-                    <div className={styles.showcaseContent}>
-                        <span className={styles.showcaseLabel}>Шаг 3</span>
-                        <Text className={styles.showcaseHeading}>Генерация кода</Text>
-                        <Text className={styles.showcaseText}>
-                            Один клик — и получаете готовый архив с Express.js сервером,
-                            Prisma схемами, middleware и полной документацией Swagger.
-                        </Text>
-                    </div>
-                    <div className={styles.showcaseImage}>
-                        ⚡
+                    <div className={`${styles.bentoCard} ${styles.bentoSmall}`}>
+                        <span className={styles.bentoNumber}>03</span>
+                        <div className={styles.bentoContent}>
+                            <Text className={styles.bentoHeading}>Генерация кода</Text>
+                            <Text className={styles.bentoText}>
+                                Express.js, Prisma, Swagger — всё в одном архиве.
+                            </Text>
+                        </div>
+                        <div className={styles.bentoVisual}>
+                            <div className={styles.bentoPlaceholder}>
+                                <span>codegen.png</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
