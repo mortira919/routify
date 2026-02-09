@@ -629,7 +629,7 @@
     white-space: nowrap;
 }
 
-/* Position each orbit item in a circle */
+/* Position each orbit item in a square pattern */
 .techOrbit1 {
     top: 0;
     left: 50%;
@@ -637,29 +637,21 @@
 }
 
 .techOrbit2 {
-    top: 20%;
+    top: 50%;
     right: 0;
+    transform: translateY(-50%);
 }
 
 .techOrbit3 {
-    bottom: 20%;
-    right: 0;
-}
-
-.techOrbit4 {
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
 }
 
-.techOrbit5 {
-    bottom: 20%;
+.techOrbit4 {
+    top: 50%;
     left: 0;
-}
-
-.techOrbit6 {
-    top: 20%;
-    left: 0;
+    transform: translateY(-50%);
 }
 
 /* Connection lines */

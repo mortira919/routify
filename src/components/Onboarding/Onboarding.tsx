@@ -122,20 +122,12 @@ export const Onboarding: React.FC = () => {
                             <span>TypeScript</span>
                         </div>
                         <div className={`${styles.techOrbitItem} ${styles.techOrbit3}`}>
-                            <img src="/express.png" alt="Express" className={styles.techLogo} />
-                            <span>Express.js</span>
-                        </div>
-                        <div className={`${styles.techOrbitItem} ${styles.techOrbit4}`}>
                             <img src="/prisma.png" alt="Prisma" className={styles.techLogo} />
                             <span>Prisma</span>
                         </div>
-                        <div className={`${styles.techOrbitItem} ${styles.techOrbit5}`}>
+                        <div className={`${styles.techOrbitItem} ${styles.techOrbit4}`}>
                             <img src="/react.png" alt="React" className={styles.techLogo} />
                             <span>React</span>
-                        </div>
-                        <div className={`${styles.techOrbitItem} ${styles.techOrbit6}`}>
-                            <img src="/antd.png" alt="Ant Design" className={styles.techLogo} />
-                            <span>Ant Design</span>
                         </div>
                     </div>
                 </div>
