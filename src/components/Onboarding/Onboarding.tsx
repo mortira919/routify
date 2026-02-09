@@ -73,9 +73,7 @@ export const Onboarding: React.FC = () => {
                                 <span className={styles.demoWindowDot} />
                             </div>
                             <div className={styles.demoWindowContent}>
-                                <div className={styles.demoPlaceholder}>
-                                    <span>demo.gif</span>
-                                </div>
+                                <img src="/demo.png" alt="Demo" className={styles.demoImage} />
                             </div>
                         </div>
                     </div>
