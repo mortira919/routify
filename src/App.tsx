@@ -19,6 +19,7 @@ import { SettingsModal } from './components/SettingsModal/SettingsModal';
 import { SchemaPanel } from './components/SchemaPanel/SchemaPanel';
 import { TutorialPanel } from './components/TutorialPanel';
 import { Onboarding } from './components/Onboarding';
+import { MobileOverlay } from './components/MobileOverlay';
 import { useProjectStore } from './store/projectStore';
 import { useTranslation } from './i18n';
 import { LanguageSwitcher } from './components/LanguageSwitcher/LanguageSwitcher';
@@ -238,8 +239,24 @@ function App() {
   const [showSchema, setShowSchema] = useState(false);
   const [showTutorial, setShowTutorial] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [showMobileOnboarding, setShowMobileOnboarding] = useState(false);
 
   const [messageApi, contextHolder] = message.useMessage();
+
+  // Detect mobile device
+  useEffect(() => {
+    const checkMobile = () => {
+      const mobile = window.innerWidth < 768;
+      setIsMobile(mobile);
+      if (!mobile) {
+        setShowMobileOnboarding(false);
+      }
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   useEffect(() => {
     const handleResize = () => {
@@ -301,6 +318,26 @@ function App() {
     });
     messageApi.info('Demo project loaded');
   };
+
+  // Mobile overlay - show when on mobile and not viewing onboarding
+  if (isMobile && hasCompletedOnboarding && !showMobileOnboarding) {
+    return (
+      <>
+        {contextHolder}
+        <MobileOverlay onShowOnboarding={() => setShowMobileOnboarding(true)} />
+      </>
+    );
+  }
+
+  // Mobile onboarding - show presentation on mobile
+  if (isMobile && showMobileOnboarding) {
+    return (
+      <>
+        {contextHolder}
+        <Onboarding />
+      </>
+    );
+  }
 
   if (!hasCompletedOnboarding) {
     return (
