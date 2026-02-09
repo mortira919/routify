@@ -57,41 +57,71 @@ export const Onboarding: React.FC = () => {
                 </div>
             </section>
 
-            {/* Features Section */}
-            <section className={styles.sectionContainer}>
+            {/* Features Section - Interactive Demo */}
+            <section className={styles.featuresSection}>
                 <Title level={2} className={styles.sectionTitle}>
-                    {t.landing.features.title}
+                    <span className={styles.italicAccent}>Инструменты</span> промышленного класса
                 </Title>
-                <div className={styles.featuresGrid}>
-                    {features.map((item, index) => (
-                        <div key={index} className={styles.featureCard}>
-                            <div className={styles.featureIconWrap}>
-                                <item.icon size={24} />
-                            </div>
-                            <Text strong className={styles.featureTitleText}>{item.title}</Text>
-                            <Text className={styles.featureDescription}>{item.desc}</Text>
-                        </div>
-                    ))}
-                </div>
-            </section>
 
-            {/* How it Works Section */}
-            <section className={styles.stepsContainer}>
-                <div className={styles.sectionContainer}>
-                    <Title level={2} className={styles.sectionTitle}>
-                        {t.landing.howItWorks.title}
-                    </Title>
-                    <div className={styles.howItWorksGrid}>
-                        {t.landing.howItWorks.steps.map((step, index) => (
-                            <div key={index} className={styles.stepItem}>
-                                <div className={styles.stepNumber}>{index + 1}</div>
-                                <div className={styles.stepContent}>
-                                    <Text strong className={styles.featureTitleText}>{step.title}</Text>
-                                    <Text className={styles.featureDescription}>{step.desc}</Text>
+                <div className={styles.featuresShowcase}>
+                    {/* Central Demo Animation */}
+                    <div className={styles.demoCenter}>
+                        <div className={styles.demoWindow}>
+                            <div className={styles.demoWindowHeader}>
+                                <span className={styles.demoWindowDot} />
+                                <span className={styles.demoWindowDot} />
+                                <span className={styles.demoWindowDot} />
+                            </div>
+                            <div className={styles.demoWindowContent}>
+                                <div className={styles.demoPlaceholder}>
+                                    <span>demo.gif</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Feature Pills around demo */}
+                    <div className={styles.featurePills}>
+                        {features.map((item, index) => (
+                            <div key={index} className={`${styles.featurePill} ${styles[`featurePill${index + 1}`]}`}>
+                                <div className={styles.featurePillIcon}>
+                                    <item.icon size={20} />
+                                </div>
+                                <div className={styles.featurePillContent}>
+                                    <Text strong className={styles.featurePillTitle}>{item.title}</Text>
+                                    <Text className={styles.featurePillDesc}>{item.desc}</Text>
                                 </div>
                             </div>
                         ))}
                     </div>
+                </div>
+            </section>
+
+            {/* How it Works - Visual Timeline */}
+            <section className={styles.timelineSection}>
+                <Title level={2} className={styles.sectionTitle}>
+                    <span className={styles.italicAccent}>Как это</span> работает
+                </Title>
+
+                <div className={styles.timelineTrack}>
+                    <div className={styles.timelineLine} />
+
+                    {t.landing.howItWorks.steps.map((step, index) => (
+                        <div key={index} className={`${styles.timelineStep} ${index % 2 === 0 ? styles.timelineLeft : styles.timelineRight}`}>
+                            <div className={styles.timelineNode}>
+                                <span>{index + 1}</span>
+                            </div>
+                            <div className={styles.timelineCard}>
+                                <Text strong className={styles.timelineTitle}>{step.title}</Text>
+                                <Text className={styles.timelineDesc}>{step.desc}</Text>
+                                <div className={styles.timelineVisual}>
+                                    <div className={styles.timelinePlaceholder}>
+                                        <span>step{index + 1}.png</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
                 </div>
             </section>
 
