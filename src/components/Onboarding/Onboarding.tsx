@@ -97,18 +97,47 @@ export const Onboarding: React.FC = () => {
 
 
 
-            {/* Tech Stack Section */}
-            <section className={styles.sectionContainer}>
+
+
+            {/* Tech Stack Section - Creative Hexagon Design */}
+            <section className={styles.techStackSection}>
                 <Title level={2} className={styles.sectionTitle}>
-                    {t.landing.techStack.title}
+                    <span className={styles.italicAccent}>Технологический</span> стек
                 </Title>
-                <div className={styles.techStackGrid}>
-                    {t.landing.techStack.items.map((item, index) => (
-                        <div key={index} className={styles.techItem}>
-                            <Text strong className={styles.techName}>{item.name}</Text>
-                            <Text className={styles.techDesc}>{item.desc}</Text>
+
+                <div className={styles.techShowcase}>
+                    <div className={styles.techOrbit}>
+                        {/* Center Logo */}
+                        <div className={styles.techCenter}>
+                            <img src="/apiicon.png" alt="Routify" className={styles.techCenterIcon} />
                         </div>
-                    ))}
+
+                        {/* Orbiting Tech Items */}
+                        <div className={`${styles.techOrbitItem} ${styles.techOrbit1}`}>
+                            <img src="/nodejs.png" alt="Node.js" className={styles.techLogo} />
+                            <span>Node.js</span>
+                        </div>
+                        <div className={`${styles.techOrbitItem} ${styles.techOrbit2}`}>
+                            <img src="/typescript.png" alt="TypeScript" className={styles.techLogo} />
+                            <span>TypeScript</span>
+                        </div>
+                        <div className={`${styles.techOrbitItem} ${styles.techOrbit3}`}>
+                            <img src="/express.png" alt="Express" className={styles.techLogo} />
+                            <span>Express.js</span>
+                        </div>
+                        <div className={`${styles.techOrbitItem} ${styles.techOrbit4}`}>
+                            <img src="/prisma.png" alt="Prisma" className={styles.techLogo} />
+                            <span>Prisma</span>
+                        </div>
+                        <div className={`${styles.techOrbitItem} ${styles.techOrbit5}`}>
+                            <img src="/react.png" alt="React" className={styles.techLogo} />
+                            <span>React</span>
+                        </div>
+                        <div className={`${styles.techOrbitItem} ${styles.techOrbit6}`}>
+                            <img src="/antd.png" alt="Ant Design" className={styles.techLogo} />
+                            <span>Ant Design</span>
+                        </div>
+                    </div>
                 </div>
             </section>
 
