@@ -941,6 +941,19 @@
     min-height: 300px;
 }
 
+.bentoImage {
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+    border: 1px solid rgba(118, 185, 0, 0.1);
+    transition: all 0.4s ease;
+}
+
+.bentoCard:hover .bentoImage {
+    border-color: rgba(118, 185, 0, 0.3);
+    box-shadow: 0 10px 40px rgba(118, 185, 0, 0.1);
+}
+
 /* Screenshots Showcase */
 .showcaseSection {
     padding: 120px 5%;

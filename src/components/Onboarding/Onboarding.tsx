@@ -208,9 +208,7 @@ export const Onboarding: React.FC = () => {
                             </Text>
                         </div>
                         <div className={styles.bentoVisual}>
-                            <div className={styles.bentoPlaceholder}>
-                                <span>canvas.png</span>
-                            </div>
+                            <img src="/canvas.png" alt="Canvas" className={styles.bentoImage} />
                         </div>
                     </div>
 
@@ -223,9 +221,7 @@ export const Onboarding: React.FC = () => {
                             </Text>
                         </div>
                         <div className={styles.bentoVisual}>
-                            <div className={styles.bentoPlaceholder}>
-                                <span>schema.png</span>
-                            </div>
+                            <img src="/schema.png" alt="Schema" className={styles.bentoImage} />
                         </div>
                     </div>
 
@@ -238,9 +234,7 @@ export const Onboarding: React.FC = () => {
                             </Text>
                         </div>
                         <div className={styles.bentoVisual}>
-                            <div className={styles.bentoPlaceholder}>
-                                <span>codegen.png</span>
-                            </div>
+                            <img src="/codegen.png" alt="Codegen" className={styles.bentoImage} />
                         </div>
                     </div>
                 </div>
