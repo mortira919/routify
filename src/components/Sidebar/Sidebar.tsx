@@ -1,26 +1,15 @@
 import { useState } from 'react';
+import { Input, Card, Badge, Space, Typography, Button } from 'antd';
 import {
-    Globe,
-    Database,
-    Send,
-    Shield,
-    Search,
-    Download,
-    Zap,
-    Layers,
-    X
+    Plus, Search, Download, FileJson,
+    Zap, Database, Shield, MessageSquare,
+    ChevronLeft, ChevronRight, HardDrive, Layout as LayoutIcon
 } from 'lucide-react';
 import { useProjectStore } from '../../store/projectStore';
 import { useTranslation } from '../../i18n';
-import { HintTooltip } from '../ui';
 import styles from './Sidebar.module.css';
 
-interface NodeType {
-    type: string;
-    nameKey: 'endpoint' | 'database' | 'response' | 'auth';
-    icon: React.ReactNode;
-    iconClass: string;
-}
+const { Text, Title } = Typography;
 
 interface SidebarProps {
     onOpenSchema?: () => void;
@@ -28,48 +17,48 @@ interface SidebarProps {
     onClose?: () => void;
 }
 
-export const Sidebar: React.FC<SidebarProps> = ({ onOpenSchema, isOpen, onClose }) => {
-    const [search, setSearch] = useState('');
-    const { exportProject, project } = useProjectStore();
-    const t = useTranslation();
+const NODE_TYPES = [
+    {
+        type: 'endpoint',
+        icon: Zap,
+        color: 'var(--method-get)',
+        labelKey: 'endpoint',
+    },
+    {
+        type: 'database',
+        icon: Database,
+        color: 'var(--method-post)',
+        labelKey: 'database',
+    },
+    {
+        type: 'auth',
+        icon: Shield,
+        color: 'var(--method-put)',
+        labelKey: 'auth',
+    },
+    {
+        type: 'response',
+        icon: MessageSquare,
+        color: 'var(--method-patch)',
+        labelKey: 'response',
+    }
+] as const;
 
-    const nodeTypes: Record<string, NodeType[]> = {
-        [t.sidebar.categories.endpoints]: [
-            {
-                type: 'endpoint',
-                nameKey: 'endpoint',
-                icon: <Globe size={16} color="white" />,
-                iconClass: styles['nodeIcon--endpoint'],
-            },
-        ],
-        [t.sidebar.categories.data]: [
-            {
-                type: 'database',
-                nameKey: 'database',
-                icon: <Database size={16} color="white" />,
-                iconClass: styles['nodeIcon--database'],
-            },
-            {
-                type: 'response',
-                nameKey: 'response',
-                icon: <Send size={16} color="white" />,
-                iconClass: styles['nodeIcon--response'],
-            },
-        ],
-        [t.sidebar.categories.security]: [
-            {
-                type: 'auth',
-                nameKey: 'auth',
-                icon: <Shield size={16} color="white" />,
-                iconClass: styles['nodeIcon--auth'],
-            },
-        ],
-    };
+export const Sidebar: React.FC<SidebarProps> = ({ onOpenSchema, isOpen, onClose }) => {
+    const { exportProject } = useProjectStore();
+    const [searchQuery, setSearchQuery] = useState('');
+    const { t } = useTranslation();
 
     const handleDragStart = (event: React.DragEvent, nodeType: string) => {
         event.dataTransfer.setData('application/routify-node', nodeType);
         event.dataTransfer.effectAllowed = 'move';
     };
+
+    const filteredNodes = NODE_TYPES.filter(node => {
+        const nodeInfo = t.sidebar.nodes[node.labelKey as keyof typeof t.sidebar.nodes];
+        return nodeInfo.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            nodeInfo.description.toLowerCase().includes(searchQuery.toLowerCase());
+    });
 
     const handleExport = () => {
         const json = exportProject();
@@ -82,117 +71,126 @@ export const Sidebar: React.FC<SidebarProps> = ({ onOpenSchema, isOpen, onClose 
         URL.revokeObjectURL(url);
     };
 
-    const getHintForNode = (nameKey: 'endpoint' | 'database' | 'response' | 'auth') => {
-        const nodeHints = {
-            endpoint: t.hints.endpoint,
-            database: t.hints.database,
-            response: t.hints.response,
-            auth: t.hints.auth,
-        };
-        return nodeHints[nameKey];
-    };
-
-    const filteredCategories = Object.entries(nodeTypes).reduce((acc, [category, nodes]) => {
-        const filtered = nodes.filter(
-            node => {
-                const nodeInfo = t.sidebar.nodes[node.nameKey];
-                return nodeInfo.name.toLowerCase().includes(search.toLowerCase()) ||
-                    nodeInfo.description.toLowerCase().includes(search.toLowerCase());
-            }
+    if (!isOpen) {
+        return (
+            <button
+                className={styles.toggleBtnClosed}
+                onClick={onClose} // In original App.tsx this toggles mobileMenuOpen
+                title="Open Sidebar"
+            >
+                <ChevronRight size={20} />
+            </button>
         );
-        if (filtered.length > 0) {
-            acc[category] = filtered;
-        }
-        return acc;
-    }, {} as Record<string, NodeType[]>);
+    }
 
     return (
         <aside className={`${styles.sidebar} ${isOpen ? styles['sidebar--open'] : ''}`}>
-            {/* Logo */}
-            <div className={styles.logo}>
-                <div className={styles.logoIcon}>
-                    <Zap size={20} color="white" />
+            <div className={styles.header}>
+                <div className={styles.logo}>
+                    <div className={styles.logoIcon}>
+                        <LayoutIcon size={20} />
+                    </div>
+                    <Title level={4} style={{ margin: 0, fontSize: '18px' }}>Routify</Title>
                 </div>
-                <span className={styles.logoText}>Routify</span>
-                {onClose && (
-                    <button
-                        className={styles.closeBtn}
-                        onClick={onClose}
-                        aria-label="Close menu"
-                    >
-                        <X size={20} />
-                    </button>
-                )}
+                <Button
+                    type="text"
+                    icon={<ChevronLeft size={20} />}
+                    onClick={onClose}
+                    className={styles.closeBtn}
+                    title="Close Sidebar"
+                />
             </div>
 
-            {/* Search */}
             <div className={styles.search}>
-                <div className={styles.searchWrapper}>
-                    <Search size={16} className={styles.searchIcon} />
-                    <input
-                        type="text"
-                        placeholder={t.sidebar.searchPlaceholder}
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)}
-                        className={styles.searchInput}
-                    />
-                </div>
+                <Input
+                    prefix={<Search size={16} style={{ color: 'var(--text-muted)' }} />}
+                    placeholder={t.sidebar.searchPlaceholder}
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    allowClear
+                />
             </div>
 
-            {/* Categories */}
-            <div className={styles.categories}>
-                {Object.entries(filteredCategories).map(([category, nodes]) => (
-                    <div key={category} className={styles.category}>
-                        <h3 className={styles.categoryTitle}>{category}</h3>
-                        {nodes.map((node) => {
-                            const nodeInfo = t.sidebar.nodes[node.nameKey];
-                            const hint = getHintForNode(node.nameKey);
+            <div className={styles.content}>
+                <div className={styles.section}>
+                    <div className={styles.sectionHeader}>
+                        <Text strong type="secondary" style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                            {t.sidebar.categories.endpoints}
+                        </Text>
+                        <Badge count={filteredNodes.length} style={{ backgroundColor: 'var(--bg-tertiary)', color: 'var(--text-secondary)', boxShadow: 'none' }} />
+                    </div>
 
+                    <div className={styles.nodeList}>
+                        {filteredNodes.map((node) => {
+                            const Icon = node.icon;
+                            const nodeInfo = t.sidebar.nodes[node.labelKey as keyof typeof t.sidebar.nodes];
                             return (
-                                <div
+                                <Card
                                     key={node.type}
-                                    className={styles.nodeItem}
+                                    size="small"
+                                    className={styles.nodeCard}
                                     draggable
                                     onDragStart={(e) => handleDragStart(e, node.type)}
+                                    styles={{ body: { padding: '12px' } }}
+                                    hoverable
                                 >
-                                    <div className={`${styles.nodeIcon} ${node.iconClass}`}>
-                                        {node.icon}
-                                    </div>
                                     <div className={styles.nodeInfo}>
-                                        <div className={styles.nodeName}>
-                                            {hint ? (
-                                                <HintTooltip
-                                                    title={hint.title}
-                                                    what={hint.what}
-                                                    why={hint.why}
-                                                    how={hint.how}
-                                                >
-                                                    {nodeInfo.name}
-                                                </HintTooltip>
-                                            ) : (
-                                                nodeInfo.name
-                                            )}
+                                        <div
+                                            className={styles.nodeIcon}
+                                            style={{ backgroundColor: `${node.color}15`, color: node.color }}
+                                        >
+                                            <Icon size={18} />
                                         </div>
-                                        <div className={styles.nodeDesc}>{nodeInfo.description}</div>
+                                        <div className={styles.nodeText}>
+                                            <Text strong style={{ fontSize: '13px', display: 'block' }}>
+                                                {nodeInfo.name}
+                                            </Text>
+                                            <Text type="secondary" style={{ fontSize: '11px' }}>
+                                                {nodeInfo.description}
+                                            </Text>
+                                        </div>
+                                        <Plus size={14} className={styles.addIcon} />
                                     </div>
-                                </div>
+                                </Card>
                             );
                         })}
                     </div>
-                ))}
+                </div>
+
+                <div className={styles.section}>
+                    <div className={styles.sectionHeader}>
+                        <Text strong type="secondary" style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                            {t.sidebar.models}
+                        </Text>
+                    </div>
+                    <Space direction="vertical" style={{ width: '100%' }} size="small">
+                        <Button
+                            block
+                            icon={<Download size={16} />}
+                            onClick={handleExport}
+                            style={{ height: '36px', textAlign: 'left', display: 'flex', alignItems: 'center' }}
+                        >
+                            {t.sidebar.exportJson}
+                        </Button>
+                        <Button
+                            block
+                            icon={<FileJson size={16} />}
+                            onClick={onOpenSchema}
+                            style={{ height: '36px', textAlign: 'left', display: 'flex', alignItems: 'center' }}
+                        >
+                            {t.sidebar.models}
+                        </Button>
+                    </Space>
+                </div>
             </div>
 
-            {/* Footer */}
             <div className={styles.footer}>
-                <button className={styles.schemaBtn} onClick={onOpenSchema}>
-                    <Layers size={18} />
-                    {t.sidebar.models}
-                    <span className={styles.modelBadge}>{project.models.length}</span>
-                </button>
-                <button className={styles.exportBtn} onClick={handleExport}>
-                    <Download size={18} />
-                    {t.sidebar.exportJson}
-                </button>
+                <div className={styles.footerStats}>
+                    <div className={styles.statItem}>
+                        <HardDrive size={12} />
+                        <Text type="secondary" style={{ fontSize: '11px', color: 'inherit' }}>Local Storage</Text>
+                    </div>
+                </div>
             </div>
         </aside>
     );

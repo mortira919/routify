@@ -5,7 +5,6 @@ import {
     Controls,
     MiniMap,
     BackgroundVariant,
-    applyNodeChanges,
     applyEdgeChanges,
     ReactFlowProvider,
 } from '@xyflow/react';
@@ -33,8 +32,6 @@ const CanvasInner: React.FC = () => {
 
     const onNodesChange = useCallback(
         (changes: NodeChange[]) => {
-            const updatedNodes = applyNodeChanges(changes, project.nodes as Node[]);
-
             changes.forEach((change) => {
                 if (change.type === 'position' && change.position) {
                     updateNodePosition(change.id, change.position);
@@ -44,11 +41,12 @@ const CanvasInner: React.FC = () => {
                         setSelectedNode(change.id);
                     }
                 }
+                if (change.type === 'remove') {
+                    useProjectStore.getState().removeNode(change.id);
+                }
             });
-
-            setProject({ ...project, nodes: updatedNodes as typeof project.nodes });
         },
-        [project, setProject, updateNodePosition, setSelectedNode]
+        [updateNodePosition, setSelectedNode]
     );
 
     const onEdgesChange = useCallback(

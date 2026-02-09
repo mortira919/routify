@@ -20,12 +20,21 @@
   padding: 0 var(--space-4);
   background: var(--bg-secondary);
   border-bottom: 1px solid var(--border-primary);
+  gap: var(--space-6);
 }
 
 .projectName {
   display: flex;
   align-items: center;
-  gap: var(--space-3);
+  gap: var(--space-4);
+  flex: 0 1 auto;
+  min-width: 0;
+}
+
+.projectNameInput {
+  flex: 0 1 auto;
+  min-width: 100px;
+  max-width: 250px;
 }
 
 .projectNameInput {
@@ -67,7 +76,8 @@
 .headerActions {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: var(--space-3);
+  flex-shrink: 0;
 }
 
 .headerBtn {
@@ -77,51 +87,51 @@
   padding: var(--space-2) var(--space-3);
   font-size: var(--text-sm);
   font-weight: 500;
-  color: var(--text-secondary);
-  background: var(--bg-tertiary);
-  border: 1px solid var(--border-primary);
+  color: #76B900;
+  background: #111;
+  border: 1px solid #333;
   border-radius: var(--radius-md);
-  transition: all var(--transition-base);
+  transition: all var(--transition-fast);
 }
 
 .headerBtn:hover {
-  background: var(--bg-elevated);
-  color: var(--text-primary);
+  background: rgba(118, 185, 0, 0.05);
+  border-color: #76B900;
+  color: #76B900;
 }
 
 .headerBtn--primary {
   background: var(--accent-primary);
   border-color: var(--accent-primary);
-  color: var(--text-primary);
-}
-
-.headerBtn--primary:hover {
-  background: var(--accent-primary-hover);
-  box-shadow: var(--shadow-glow);
-}
-
-.headerBtn--demo {
-  background: linear-gradient(135deg, #f59e0b, #fbbf24);
-  border-color: #f59e0b;
   color: #000;
   font-weight: 600;
 }
 
+.headerBtn--primary:hover {
+  background: var(--accent-primary-hover);
+  border-color: var(--accent-primary-hover);
+}
+
+.headerBtn--demo {
+  background: #111;
+  border: 1px solid #76B900;
+  color: #76B900;
+}
+
 .headerBtn--demo:hover {
-  background: linear-gradient(135deg, #fbbf24, #fcd34d);
-  box-shadow: 0 0 20px rgb(245 158 11 / 0.4);
+  background: rgba(118, 185, 0, 0.1);
+  box-shadow: 0 0 15px rgba(118, 185, 0, 0.2);
 }
 
 .headerBtn--tutorial {
-  background: linear-gradient(135deg, #8b5cf6, #a78bfa);
-  border-color: #8b5cf6;
-  color: #fff;
-  font-weight: 600;
+  background: #111;
+  border: 1px solid #76B900;
+  color: #76B900;
 }
 
 .headerBtn--tutorial:hover {
-  background: linear-gradient(135deg, #a78bfa, #c4b5fd);
-  box-shadow: 0 0 20px rgb(139 92 246 / 0.4);
+  background: rgba(118, 185, 0, 0.1);
+  box-shadow: 0 0 15px rgba(118, 185, 0, 0.2);
 }
 
 .canvasWrapper {

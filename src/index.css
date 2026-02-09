@@ -1,42 +1,41 @@
 :root {
-  /* Colors - Dark Theme */
-  --bg-primary: #0a0a0f;
-  --bg-secondary: #12121a;
-  --bg-tertiary: #1a1a25;
-  --bg-elevated: #22222f;
-  --bg-node: #1e1e2e;
+  /* Colors - NVIDIA Dark Theme */
+  --bg-primary: #000000;
+  --bg-secondary: #0a0a0a;
+  --bg-tertiary: #111111;
+  --bg-elevated: #1a1a1a;
+  --bg-node: #0d0d0d;
 
-  /* Accent Colors */
-  --accent-primary: #6366f1;
-  --accent-primary-hover: #818cf8;
-  --accent-secondary: #22d3ee;
-  --accent-success: #10b981;
-  --accent-warning: #f59e0b;
-  --accent-danger: #ef4444;
+  /* Accent Colors - NVIDIA Green */
+  --accent-primary: #76B900;
+  --accent-primary-hover: #82cc00;
+  --accent-secondary: #4d88ff;
+  --accent-success: #76B900;
+  --accent-warning: #ffb000;
+  --accent-danger: #ff4d4d;
 
-  /* Method Colors */
-  --method-get: #22c55e;
-  --method-post: #3b82f6;
-  --method-put: #f59e0b;
-  --method-patch: #8b5cf6;
-  --method-delete: #ef4444;
+  /* Method Colors - Clean */
+  --method-get: #76B900;
+  --method-post: #4d88ff;
+  --method-put: #ffb000;
+  --method-patch: #9d4dff;
+  --method-delete: #ff4d4d;
 
   /* Text Colors */
-  --text-primary: #f8fafc;
-  --text-secondary: #94a3b8;
-  --text-muted: #64748b;
-  --text-disabled: #475569;
+  --text-primary: #ffffff;
+  --text-secondary: #a0a0a0;
+  --text-muted: #606060;
+  --text-disabled: #404040;
 
   /* Border Colors */
-  --border-primary: #2d2d3a;
-  --border-secondary: #3d3d4a;
-  --border-focus: #6366f1;
+  --border-primary: #1a1a1a;
+  --border-secondary: #2a2a2a;
+  --border-focus: #76B900;
 
-  /* Shadows */
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.3);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5), 0 4px 6px -4px rgb(0 0 0 / 0.4);
-  --shadow-glow: 0 0 20px rgb(99 102 241 / 0.3);
+  /* Shadows - Minimalist */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.5);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.5);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5);
 
   /* Spacing */
   --space-1: 0.25rem;
@@ -107,23 +106,24 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Scrollbar Styling */
+/* Scrollbar Styling - NVIDIA Style */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--bg-secondary);
+  background: #050505;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--border-secondary);
+  background: #333;
+  border: 2px solid #050505;
   border-radius: var(--radius-full);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--text-muted);
+  background: #76B900;
 }
 
 /* Typography */
@@ -270,29 +270,97 @@ select {
   }
 }
 
-/* Overlay for mobile menu */
-.mobileOverlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(4px);
-  z-index: 40;
-  animation: fadeIn 0.2s ease;
-}
+@media (max-width: 1024px) {
 
-.mobileOverlay--visible {
-  display: block;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
+  /* Overlay for mobile menu */
+  .mobileOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    z-index: 40;
+    animation: fadeIn 0.2s ease;
+    display: none;
   }
 
-  to {
-    opacity: 1;
+  .mobileOverlay--visible {
+    display: block;
   }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+}
+
+/* ========================================
+   ANT DESIGN OVERRIDES
+   ======================================== */
+
+/* Global Button Overrides */
+.ant-btn-primary {
+  background-color: #76B900 !important;
+  border-color: #76B900 !important;
+  color: #000000 !important;
+  font-weight: 600 !important;
+  box-shadow: none !important;
+}
+
+.ant-btn-primary:hover {
+  background-color: #82cc00 !important;
+  border-color: #82cc00 !important;
+  color: #000000 !important;
+}
+
+.ant-btn:not(.ant-btn-primary) {
+  background-color: transparent !important;
+  border-color: #333 !important;
+  color: #76B900 !important;
+}
+
+.ant-btn:not(.ant-btn-primary):hover {
+  border-color: #76B900 !important;
+  background-color: rgba(118, 185, 0, 0.05) !important;
+}
+
+/* Tooltip & Popover */
+.ant-tooltip-inner {
+  background-color: #111 !important;
+  border: 1px solid #333 !important;
+  color: #fff !important;
+}
+
+.ant-tooltip-arrow::before {
+  background-color: #111 !important;
+}
+
+/* Modal */
+.ant-modal-content {
+  background-color: #0a0a0a !important;
+  border: 1px solid #1a1a1a !important;
+  color: #fff !important;
+}
+
+.ant-modal-header {
+  background-color: #0a0a0a !important;
+  border-bottom: 1px solid #1a1a1a !important;
+}
+
+.ant-modal-title {
+  color: #76B900 !important;
+}
+
+.ant-modal-close {
+  color: #606060 !important;
+}
+
+.ant-modal-close:hover {
+  color: #fff !important;
 }
 
 /* Utility classes for responsive visibility */

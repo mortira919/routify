@@ -28,7 +28,7 @@ const createDefaultField = (): ModelField => ({
 
 export const SchemaBuilder: React.FC = () => {
     const { project, addModel, updateModel, removeModel } = useProjectStore();
-    const t = useTranslation();
+    const { t } = useTranslation();
     const [expandedModels, setExpandedModels] = useState<Set<string>>(new Set());
     const [newModelName, setNewModelName] = useState('');
     const [editingField, setEditingField] = useState<{ model: string; index: number } | null>(null);

@@ -1,9 +1,11 @@
-import { useState } from 'react';
-import { X, Database, Globe, Shield, FileCode } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Modal, Form, Input, Select, Checkbox, Space, Typography, Divider } from 'antd';
+import { Database, Globe, Shield, FileCode } from 'lucide-react';
 import { useProjectStore } from '../../store/projectStore';
 import { useTranslation } from '../../i18n';
 import type { ProjectSettings } from '../../types';
-import styles from './SettingsModal.module.css';
+
+const { Title, Text } = Typography;
 
 interface SettingsModalProps {
     isOpen: boolean;
@@ -15,149 +17,123 @@ const DATABASE_OPTIONS = [
     { value: 'postgresql', label: 'PostgreSQL' },
     { value: 'mysql', label: 'MySQL' },
     { value: 'sqlite', label: 'SQLite' },
-] as const;
+];
 
 export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose }) => {
     const { project, updateSettings } = useProjectStore();
-    const t = useTranslation();
+    const { t } = useTranslation();
     const [settings, setSettings] = useState<ProjectSettings>(project.settings);
 
-    if (!isOpen) return null;
+    useEffect(() => {
+        if (isOpen) {
+            setSettings(project.settings);
+        }
+    }, [isOpen, project.settings]);
 
     const handleSave = () => {
         updateSettings(settings);
         onClose();
     };
 
-    const handleBackdropClick = (e: React.MouseEvent) => {
-        if (e.target === e.currentTarget) {
-            onClose();
-        }
-    };
-
     return (
-        <div className={styles.backdrop} onClick={handleBackdropClick}>
-            <div className={styles.modal}>
-                <div className={styles.header}>
-                    <h2 className={styles.title}>{t.settings.title}</h2>
-                    <button className={styles.closeBtn} onClick={onClose}>
-                        <X size={20} />
-                    </button>
+        <Modal
+            title={t.settings.title}
+            open={isOpen}
+            onCancel={onClose}
+            onOk={handleSave}
+            width={600}
+            centered
+            className="nvidia-modal"
+        >
+            <Form layout="vertical">
+                <Divider orientation="left" style={{ borderColor: 'var(--border-color)' }}>
+                    <Space><Database size={16} /> <Text strong>{t.settings.database.title}</Text></Space>
+                </Divider>
+
+                <Form.Item label={t.settings.database.type}>
+                    <Select
+                        value={settings.database}
+                        onChange={(val) => setSettings({ ...settings, database: val as any })}
+                        options={DATABASE_OPTIONS}
+                    />
+                </Form.Item>
+
+                <Divider orientation="left" style={{ borderColor: 'var(--border-color)' }}>
+                    <Space><Globe size={16} /> <Text strong>{t.settings.server.title}</Text></Space>
+                </Divider>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                    <Form.Item label={t.settings.server.port}>
+                        <Input
+                            type="number"
+                            value={settings.port}
+                            onChange={(e) => setSettings({ ...settings, port: parseInt(e.target.value) || 3000 })}
+                        />
+                    </Form.Item>
+                    <Form.Item label={t.settings.server.basePath}>
+                        <Input
+                            value={settings.basePath}
+                            onChange={(e) => setSettings({ ...settings, basePath: e.target.value })}
+                        />
+                    </Form.Item>
                 </div>
 
-                <div className={styles.content}>
-                    {/* Database */}
-                    <div className={styles.section}>
-                        <div className={styles.sectionHeader}>
-                            <Database size={18} />
-                            <h3>{t.settings.database.title}</h3>
-                        </div>
-                        <div className={styles.field}>
-                            <label>{t.settings.database.type}</label>
-                            <select
-                                value={settings.database}
+                <Divider orientation="left" style={{ borderColor: 'var(--border-color)' }}>
+                    <Space><Shield size={16} /> <Text strong>{t.settings.features.title}</Text></Space>
+                </Divider>
+                <Space direction="vertical" style={{ width: '100%' }}>
+                    <Checkbox
+                        checked={settings.enableSwagger}
+                        onChange={(e) => setSettings({ ...settings, enableSwagger: e.target.checked })}
+                    >
+                        {t.settings.features.enableSwagger}
+                    </Checkbox>
+                    <Checkbox
+                        checked={settings.enableCors}
+                        onChange={(e) => setSettings({ ...settings, enableCors: e.target.checked })}
+                    >
+                        {t.settings.features.enableCors}
+                    </Checkbox>
+                    {settings.enableCors && (
+                        <Form.Item label={t.settings.features.corsOrigins} style={{ marginTop: '8px', marginBottom: 0 }}>
+                            <Input
+                                placeholder={t.settings.features.corsPlaceholder}
+                                value={settings.corsOrigins.join(', ')}
                                 onChange={(e) => setSettings({
                                     ...settings,
-                                    database: e.target.value as ProjectSettings['database']
+                                    corsOrigins: e.target.value.split(',').map(s => s.trim()).filter(Boolean)
                                 })}
-                            >
-                                {DATABASE_OPTIONS.map(opt => (
-                                    <option key={opt.value} value={opt.value}>{opt.label}</option>
-                                ))}
-                            </select>
-                        </div>
-                    </div>
-
-                    {/* Server */}
-                    <div className={styles.section}>
-                        <div className={styles.sectionHeader}>
-                            <Globe size={18} />
-                            <h3>{t.settings.server.title}</h3>
-                        </div>
-                        <div className={styles.fieldRow}>
-                            <div className={styles.field}>
-                                <label>{t.settings.server.port}</label>
-                                <input
-                                    type="number"
-                                    value={settings.port}
-                                    onChange={(e) => setSettings({
-                                        ...settings,
-                                        port: parseInt(e.target.value) || 3000
-                                    })}
-                                />
-                            </div>
-                            <div className={styles.field}>
-                                <label>{t.settings.server.basePath}</label>
-                                <input
-                                    type="text"
-                                    value={settings.basePath}
-                                    onChange={(e) => setSettings({ ...settings, basePath: e.target.value })}
-                                    placeholder="/api"
-                                />
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Features */}
-                    <div className={styles.section}>
-                        <div className={styles.sectionHeader}>
-                            <Shield size={18} />
-                            <h3>{t.settings.features.title}</h3>
-                        </div>
-                        <label className={styles.checkbox}>
-                            <input
-                                type="checkbox"
-                                checked={settings.enableSwagger}
-                                onChange={(e) => setSettings({ ...settings, enableSwagger: e.target.checked })}
                             />
-                            <span>{t.settings.features.enableSwagger}</span>
-                        </label>
-                        <label className={styles.checkbox}>
-                            <input
-                                type="checkbox"
-                                checked={settings.enableCors}
-                                onChange={(e) => setSettings({ ...settings, enableCors: e.target.checked })}
-                            />
-                            <span>{t.settings.features.enableCors}</span>
-                        </label>
-                        {settings.enableCors && (
-                            <div className={styles.field}>
-                                <label>{t.settings.features.corsOrigins}</label>
-                                <input
-                                    type="text"
-                                    value={settings.corsOrigins.join(', ')}
-                                    onChange={(e) => setSettings({
-                                        ...settings,
-                                        corsOrigins: e.target.value.split(',').map(s => s.trim()).filter(Boolean)
-                                    })}
-                                    placeholder={t.settings.features.corsPlaceholder}
-                                />
-                            </div>
-                        )}
-                    </div>
+                        </Form.Item>
+                    )}
+                </Space>
 
-                    {/* Code Info */}
-                    <div className={styles.section}>
-                        <div className={styles.sectionHeader}>
-                            <FileCode size={18} />
-                            <h3>{t.settings.generatedCode.title}</h3>
-                        </div>
-                        <div className={styles.info}>
-                            <p>{t.settings.generatedCode.target}: <strong>Express.js + {settings.database === 'mongodb' ? 'Mongoose' : 'Prisma'}</strong></p>
-                            <p>{t.settings.generatedCode.apiStyle}: <strong>REST</strong></p>
-                        </div>
-                    </div>
+                <Divider orientation="left" style={{ borderColor: 'var(--border-color)' }}>
+                    <Space><FileCode size={16} /> <Text strong>{t.settings.generatedCode.title}</Text></Space>
+                </Divider>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                    <Form.Item label={t.settings.generatedCode.target}>
+                        <Select
+                            value={settings.target}
+                            onChange={(val) => setSettings({ ...settings, target: val as any })}
+                            options={[
+                                { value: 'nodejs', label: 'Node.js (Express)' },
+                                { value: 'typescript', label: 'TypeScript (Express)' },
+                            ]}
+                        />
+                    </Form.Item>
+                    <Form.Item label={t.settings.generatedCode.apiStyle}>
+                        <Select
+                            value={settings.apiStyle}
+                            onChange={(val) => setSettings({ ...settings, apiStyle: val as any })}
+                            options={[
+                                { value: 'rest', label: 'RESTful' },
+                                { value: 'minimal', label: 'Minimal API' },
+                            ]}
+                        />
+                    </Form.Item>
                 </div>
-
-                <div className={styles.footer}>
-                    <button className={styles.cancelBtn} onClick={onClose}>
-                        {t.settings.buttons.cancel}
-                    </button>
-                    <button className={styles.saveBtn} onClick={handleSave}>
-                        {t.settings.buttons.save}
-                    </button>
-                </div>
-            </div>
-        </div>
+            </Form>
+        </Modal>
     );
 };

@@ -8,7 +8,7 @@ interface TutorialPanelProps {
 }
 
 export const TutorialPanel: React.FC<TutorialPanelProps> = ({ isOpen, onClose }) => {
-    const t = useTranslation();
+    const { t } = useTranslation();
 
     if (!isOpen) return null;
 

@@ -198,4 +198,6 @@ export interface ProjectSettings {
     enableSwagger: boolean;
     enableCors: boolean;
     corsOrigins: string[];
+    target: 'nodejs' | 'typescript';
+    apiStyle: 'rest' | 'minimal';
 }
