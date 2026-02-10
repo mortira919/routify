@@ -12,6 +12,13 @@ export const Onboarding: React.FC = () => {
     const completeOnboarding = useProjectStore(state => state.completeOnboarding);
     const { t } = useTranslation();
 
+    const scrollToSection = (id: string) => {
+        const element = document.getElementById(id);
+        if (element) {
+            element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    };
+
     const features = [
         { icon: Zap, title: t.landing.features.flow.title, desc: t.landing.features.flow.desc },
         { icon: Target, title: t.landing.features.schema.title, desc: t.landing.features.schema.desc },
@@ -29,14 +36,57 @@ export const Onboarding: React.FC = () => {
             {/* Sticky Header */}
             <header className={styles.landingHeader}>
                 <div className={styles.headerLogo}>
-                    <img src="/apiicon.png" alt="Routify" className={styles.headerLogoImg} />
-                    <span>ROUTIFY</span>
+                    <button
+                        type="button"
+                        className={styles.headerLogoButton}
+                        onClick={() => scrollToSection('hero')}
+                    >
+                        <img src="/apiicon.png" alt="Routify" className={styles.headerLogoImg} />
+                        <span>ROUTIFY</span>
+                    </button>
                 </div>
+                <nav className={styles.headerNav}>
+                    <button
+                        type="button"
+                        className={styles.headerNavButton}
+                        onClick={() => scrollToSection('features')}
+                    >
+                        Инструменты
+                    </button>
+                    <button
+                        type="button"
+                        className={styles.headerNavButton}
+                        onClick={() => scrollToSection('tech')}
+                    >
+                        Технологии
+                    </button>
+                    <button
+                        type="button"
+                        className={styles.headerNavButton}
+                        onClick={() => scrollToSection('use-cases')}
+                    >
+                        Кому подходит
+                    </button>
+                    <button
+                        type="button"
+                        className={styles.headerNavButton}
+                        onClick={() => scrollToSection('how-it-works')}
+                    >
+                        Как работает
+                    </button>
+                    <button
+                        type="button"
+                        className={`${styles.headerNavButton} ${styles.headerNavCta}`}
+                        onClick={() => scrollToSection('final-cta')}
+                    >
+                        Начать
+                    </button>
+                </nav>
                 <LanguageSwitcher />
             </header>
 
             {/* Hero Section */}
-            <section className={styles.heroSection}>
+            <section id="hero" className={styles.heroSection}>
                 <div className={styles.heroContent}>
                     <Title level={1} className={styles.title}>
                         {t.landing.hero.title1}
@@ -58,7 +108,7 @@ export const Onboarding: React.FC = () => {
             </section>
 
             {/* Features Section - Interactive Demo */}
-            <section className={styles.featuresSection}>
+            <section id="features" className={styles.featuresSection}>
                 <Title level={2} className={styles.sectionTitle}>
                     <span className={styles.italicAccent}>Инструменты</span> промышленного класса
                 </Title>
@@ -100,7 +150,7 @@ export const Onboarding: React.FC = () => {
 
 
             {/* Tech Stack Section - Creative Hexagon Design */}
-            <section className={styles.techStackSection}>
+            <section id="tech" className={styles.techStackSection}>
                 <Title level={2} className={styles.sectionTitle}>
                     <span className={styles.italicAccent}>Технологический</span> стек
                 </Title>
@@ -134,7 +184,7 @@ export const Onboarding: React.FC = () => {
             </section>
 
             {/* Use Cases - Floating Cards Design */}
-            <section className={styles.useCasesSection}>
+            <section id="use-cases" className={styles.useCasesSection}>
                 <Title level={2} className={styles.sectionTitle}>
                     <span className={styles.italicAccent}>Для кого</span> это создано?
                 </Title>
@@ -170,7 +220,7 @@ export const Onboarding: React.FC = () => {
             </section>
 
             {/* Stats Section - Animated counters */}
-            <section className={styles.statsSection}>
+            <section id="stats" className={styles.statsSection}>
                 <div className={styles.statsGrid}>
                     <div className={styles.statItem}>
                         <span className={styles.statNumber}>10x</span>
@@ -192,7 +242,7 @@ export const Onboarding: React.FC = () => {
             </section>
 
             {/* Showcase - Bento Grid Design */}
-            <section className={styles.showcaseSection}>
+            <section id="how-it-works" className={styles.showcaseSection}>
                 <Title level={2} className={styles.showcaseTitle}>
                     <span className={styles.italicAccent}>Как это</span> работает
                 </Title>
@@ -241,7 +291,7 @@ export const Onboarding: React.FC = () => {
             </section>
 
             {/* Quote Section */}
-            <section className={styles.quoteSection}>
+            <section id="quote" className={styles.quoteSection}>
                 <Text className={styles.quoteText}>
                     "Лучший код — тот, который не нужно писать вручную"
                 </Text>
@@ -249,7 +299,7 @@ export const Onboarding: React.FC = () => {
             </section>
 
             {/* CTA Section */}
-            <section className={styles.finalCta}>
+            <section id="final-cta" className={styles.finalCta}>
                 <Title level={2} className={styles.sectionTitle}>
                     {t.landing.finalCta.title}
                 </Title>
